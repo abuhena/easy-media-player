@@ -23,7 +23,7 @@ module.exports = grunt => {
     less: {
       all: {
         files: {
-          '.tmp/mr-slider.css': 'src/css/main.less',
+          './em-player.css': 'src/css/main.less',
         },
       },
     },
@@ -37,7 +37,7 @@ module.exports = grunt => {
           ],
         },
         files: {
-          '.tmp/mr-slider.js': ['src/js/*.js'],
+          './em-player.js': ['src/js/{,*/}*.js'],
         },
       },
     },
@@ -54,14 +54,14 @@ module.exports = grunt => {
     uglify: {
       dist: {
         files: {
-          './mr.slider.min.js': ['./.tmp/mr-slider.js']
+          './em-player.min.js': ['./em-player.js']
         }
       }
     },
     cssmin: {
       dist: {
         files: {
-          './mr.slider.min.css': ['./.tmp/mr-slider.css']
+          './em-player.min.css': ['./em-player.css']
         }
       }
     }
