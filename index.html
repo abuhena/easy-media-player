@@ -3,42 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>mr-slider test</title>
-    <script src=".tmp/mr-slider.js"></script>
-    <link rel="stylesheet" href=".tmp/mr-slider.css">
+    <script src="./components/DateJS/build/production/date.min.js"></script>
+    <link rel="stylesheet" href="./components/font-awesome/font-awesome.min.css">
     <script>
-        setTimeout(function () {
-            window.$slider = new MrSlider('hola');
-            $slider.events().onchange = function (pos) {
-                if (pos.fill > 200) {
-                    $slider.setColorPalette({
-                        fill: '#F21557',
-                        body: '#3C3B3B',
-                        thumb: '#F21557',
-                    });
-                }
-                var el = document.getElementById('test');
-                el.innerHTML = $slider.getValue();
-            };
-            $slider.events().oninit = function (val) {
-                alert('with value '+ val);
-            };
 
-            window.$sliderX = new MrSlider('hola1');
-            setTimeout(function () {
-                $sliderX.setValue(20);
-            }, 3000)
-        }, 1000);
     </script>
 </head>
 <body>
-<div style="padding: 20px; margin: 0px auto; width: 800px; height: 150px; background-color: #DAD9D9;">
-
-    <div id="hola" data-mr-slider data-start="0" data-range="300" data-thumb-color="#FF6D1E"
-    data-fill-color="#FF6D1E" data-body-color="#3C3B3B"></div>
-    <h3 id="test"></h3>
-    <div id="hola1" data-mr-slider data-start="0" data-range="100"></div>
-    <h3 id="test1"></h3>
-
-</div>
+    
 </body>
 </html>
