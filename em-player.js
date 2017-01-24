@@ -51,17 +51,28 @@ var Initializer = function () {
         value: function customize() {
             this.videoURL = this.player.getAttribute('src');
             var controls = this.player.getAttribute('controls');
-            var style = this.player.getAttribute('style');
             if (controls !== null) this.player.removeAttribute('controls');
-            if (style !== null) this.player.removeAttribute('style');
             var dimen = Initializer.screen(this.player.getAttribute('data-width'));
+            this.player.style.width = dimen[0] + 'px';
+            this.player.style.height = dimen[1] + 'px';
+            this.layer = this.createLayer();
+        }
+    }, {
+        key: 'createLayer',
+        value: function createLayer() {
+            var el = document.createElement('div');
+            el.classList.add('em-player');
+            el.style.width = this.player.style.width;
+            el.style.height = this.player.style.height;
+            el.style.left = this.player.offsetLeft + 'px';
+            el.style.top = this.player.offsetTop + 'px';
+            this.player.parentNode.insertBefore(el, this.player.nextSibling);
+            return el;
         }
     }], [{
         key: 'screen',
         value: function screen() {
             var w = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 640;
-            width = 640;
-            height = 360;
 
             var ratio = 56.25;
             w = w === null ? 640 : w;
