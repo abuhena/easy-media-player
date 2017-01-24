@@ -54,14 +54,16 @@ module.exports = grunt => {
     uglify: {
       dist: {
         files: {
-          './em-player.min.js': ['./em-player.js', './components/DateJS/build/production/date.min.js']
+          './em-player.min.js': ['./em-player.js', './components/DateJS/build/production/date.min.js',
+          './components/m-range-slider/mr.slider.min.js']
         }
       }
     },
     cssmin: {
       dist: {
         files: {
-          './em-player.min.css': ['./em-player.css', './components/font-awesome/font-awesome.min.css']
+          './em-player.min.css': ['./em-player.css', './components/font-awesome/font-awesome.min.css',
+          './components/m-range-slider/mr.slider.min.css']
         }
       }
     }
