@@ -5,9 +5,9 @@ window.onload = () => {
         const attr = 'data-em-player';
         let getAllPlayer = document.getElementsByTagName('video');
         getAllPlayer = Array.prototype.slice.call(getAllPlayer);
-        getAllPlayer.forEach(each => {
+        getAllPlayer.forEach((each, index) => {
             if (each.getAttribute(attr) !== null || each.getAttribute(attr) !== undefined) {
-                return new Initializer(each);
+                return new Initializer(each, index);
             }
         });
     })();

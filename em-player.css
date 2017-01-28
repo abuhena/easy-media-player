@@ -4,3 +4,9 @@
   left: 0;
   background: rgba(255, 255, 255, 0);
 }
+.em-player .control-layer {
+  position: absolute;
+  height: 150px;
+  bottom: 0px;
+  color: #fff;
+}

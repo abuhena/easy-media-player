@@ -1,6 +1,7 @@
-export default class Initializer {
-    constructor(player) {
-        this.slider;
+import CustomControls from './custom.controls.js';
+export default class Initializer extends CustomControls {
+    constructor(player, index) {
+        super(index);
         this.player = player;
         this.customize();
     }
@@ -13,7 +14,15 @@ export default class Initializer {
         this.player.style.width = `${dimen[0]}px`;
         this.player.style.height = `${dimen[1]}px`;
         this.layer = this.createLayer();
+        console.dir(this.player);
+        this.controlLayer = this.createControlLayer(this.player, this.layer);
     }
+
+    set controlLayer(dom) {
+        this.slider = new MrSlider('em-slider-layer');
+        this.slider.appendSlider(dom);
+    }
+
 
     static screen(w = 640) {
         const ratio = 56.25;
