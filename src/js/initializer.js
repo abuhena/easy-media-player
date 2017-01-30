@@ -15,6 +15,11 @@ export default class Initializer extends CustomControls {
         this.player.style.height = `${dimen[1]}px`;
         this.layer = this.createLayer();
         this.controlLayer = this.createControlLayer(this.player, this.layer);
+        this.timeLayer;
+        this.ready().metadata().then(() => {
+            this.duration = this.player.duration;
+            this.elapsed = this.player.currentTime;
+        }).catch(this.videoError);
     }
 
     set controlLayer(dom) {
@@ -23,6 +28,7 @@ export default class Initializer extends CustomControls {
         dom.appendChild(titleEl);
         dom.appendChild(sliderParentEl);
         this.attachSlider(sliderParentEl);
+        this.timeLayer = this.createTimeLayer(dom);
     }
 
 
@@ -52,5 +58,26 @@ export default class Initializer extends CustomControls {
         el.style.top = `${this.player.offsetTop}px`;
         this.player.parentNode.insertBefore(el, this.player.nextSibling);
         return el;
+    }
+
+    createTimeLayer(controlLayer) {
+        const parentEl = document.createElement('div');
+        parentEl.classList.add('timer-cmp');
+        const elTE = document.createElement('p');
+        elTE.classList.add('timer');
+        elTE.style.left = '0px';
+        elTE.innerText = '00:00';
+        const elTS = document.createElement('p');
+        elTS.classList.add('timer');
+        elTS.style.right = '0px';
+        elTS.innerText = '00:00';
+        parentEl.appendChild(elTE);
+        parentEl.appendChild(elTS);
+        controlLayer.appendChild(parentEl);
+        return [elTE, elTS];
+    }
+
+    videoError() {
+
     }
 }
