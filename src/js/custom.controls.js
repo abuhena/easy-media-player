@@ -2,6 +2,8 @@ export default class CustomControls {
     constructor(index) {
         this.index = index;
         this.progressBarId = 'em-player-progress-bar';
+        const now = new Date();
+        this.idPrefix = `fx-${now.getTime()}`;
         this.slider;
     }
 
@@ -16,4 +18,11 @@ export default class CustomControls {
         layer.appendChild(elem);
         return elem;
     } 
+
+    attachSlider(parentEl) {
+        this.slider = new MrSlider('em-slider-layer');
+        this.slider.appendSlider(parentEl, () => {
+            this.slider.setColorPalette({fill: '#429CE3', thumb: '#429CE3', body: '#777A78'});
+        });
+    }
 }

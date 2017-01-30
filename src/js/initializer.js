@@ -14,13 +14,15 @@ export default class Initializer extends CustomControls {
         this.player.style.width = `${dimen[0]}px`;
         this.player.style.height = `${dimen[1]}px`;
         this.layer = this.createLayer();
-        console.dir(this.player);
         this.controlLayer = this.createControlLayer(this.player, this.layer);
     }
 
     set controlLayer(dom) {
-        this.slider = new MrSlider('em-slider-layer');
-        this.slider.appendSlider(dom);
+        const sliderParentEl = document.createElement('div');
+        const titleEl = this.addTitle();
+        dom.appendChild(titleEl);
+        dom.appendChild(sliderParentEl);
+        this.attachSlider(sliderParentEl);
     }
 
 
@@ -28,6 +30,17 @@ export default class Initializer extends CustomControls {
         const ratio = 56.25;
         w = w === null ? 640 : w;
         return [w, ((w * ratio)/100)];
+    }
+
+    addTitle() {
+        let title;
+        title = this.videoURL.substr(this.videoURL.lastIndexOf('/') + 1);
+        if (this.player.getAttribute('data-title')) title = this.player.getAttribute('data-title');
+        const el = document.createElement('div');
+        el.classList.add('title');
+        el.setAttribute('id', `title-${this.idPrefix}`);
+        el.innerText = title;
+        return el;
     }
 
     createLayer() {

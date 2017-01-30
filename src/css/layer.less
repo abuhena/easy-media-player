@@ -4,10 +4,22 @@
     top: 0;
     left: 0;
     background: @water;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
     .control-layer {
         position: absolute;
         height: 150px;
         bottom: 0px;
         color: @white;
+        .title {
+            font-size: 35px;
+            color: @white;
+            padding-bottom: 10px;
+            padding-top: 5px;
+        }
     }
 }

@@ -3,10 +3,22 @@
   top: 0;
   left: 0;
   background: rgba(255, 255, 255, 0);
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 }
 .em-player .control-layer {
   position: absolute;
   height: 150px;
   bottom: 0px;
   color: #fff;
+}
+.em-player .control-layer .title {
+  font-size: 35px;
+  color: #fff;
+  padding-bottom: 10px;
+  padding-top: 5px;
 }

@@ -18,6 +18,8 @@ var CustomControls = function () {
 
         this.index = index;
         this.progressBarId = 'em-player-progress-bar';
+        var now = new Date();
+        this.idPrefix = 'fx-' + now.getTime();
         this.slider;
     }
 
@@ -33,6 +35,16 @@ var CustomControls = function () {
             elem.style.left = padding / 2 + 'px';
             layer.appendChild(elem);
             return elem;
+        }
+    }, {
+        key: 'attachSlider',
+        value: function attachSlider(parentEl) {
+            var _this = this;
+
+            this.slider = new MrSlider('em-slider-layer');
+            this.slider.appendSlider(parentEl, function () {
+                _this.slider.setColorPalette({ fill: '#429CE3', thumb: '#429CE3', body: '#777A78' });
+            });
         }
     }]);
 
@@ -107,8 +119,19 @@ var Initializer = function (_CustomControls) {
             this.player.style.width = dimen[0] + 'px';
             this.player.style.height = dimen[1] + 'px';
             this.layer = this.createLayer();
-            console.dir(this.player);
             this.controlLayer = this.createControlLayer(this.player, this.layer);
+        }
+    }, {
+        key: 'addTitle',
+        value: function addTitle() {
+            var title = void 0;
+            title = this.videoURL.substr(this.videoURL.lastIndexOf('/') + 1);
+            if (this.player.getAttribute('data-title')) title = this.player.getAttribute('data-title');
+            var el = document.createElement('div');
+            el.classList.add('title');
+            el.setAttribute('id', 'title-' + this.idPrefix);
+            el.innerText = title;
+            return el;
         }
     }, {
         key: 'createLayer',
@@ -125,8 +148,11 @@ var Initializer = function (_CustomControls) {
     }, {
         key: 'controlLayer',
         set: function set(dom) {
-            this.slider = new MrSlider('em-slider-layer');
-            this.slider.appendSlider(dom);
+            var sliderParentEl = document.createElement('div');
+            var titleEl = this.addTitle();
+            dom.appendChild(titleEl);
+            dom.appendChild(sliderParentEl);
+            this.attachSlider(sliderParentEl);
         }
     }], [{
         key: 'screen',
