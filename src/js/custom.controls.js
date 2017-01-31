@@ -34,7 +34,6 @@ export default class CustomControls extends MediaEvents {
     }
 
     set duration(duration) {
-        alert('hola')
         const cT = new Date.clearTime()
             .addSeconds(duration)
             .toString('mm:ss');

@@ -70,7 +70,6 @@ var CustomControls = function (_MediaEvents) {
     }, {
         key: 'duration',
         set: function set(duration) {
-            alert('hola');
             var cT = new Date.clearTime().addSeconds(duration).toString('mm:ss');
             this.timeLayer[1].innerText = cT;
         }
@@ -152,6 +151,10 @@ var Initializer = function (_CustomControls) {
             this.controlLayer = this.createControlLayer(this.player, this.layer);
             this.timeLayer;
             this.ready().metadata().then(function () {
+                _this2.slider.setRange(_this2.player.duration);
+                setTimeout(function () {
+                    console.log(_this2.slider.getValue());
+                }, 5000);
                 _this2.duration = _this2.player.duration;
                 _this2.elapsed = _this2.player.currentTime;
             }).catch(this.videoError);
