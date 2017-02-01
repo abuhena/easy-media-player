@@ -15,12 +15,9 @@ export default class Initializer extends CustomControls {
         this.player.style.height = `${dimen[1]}px`;
         this.layer = this.createLayer();
         this.controlLayer = this.createControlLayer(this.player, this.layer);
+        this.maskLayer = this.createMaskLayer();
         this.timeLayer;
-        this.ready().metadata().then(() => {
-            this.slider.setRange(this.player.duration);
-            this.duration = this.player.duration;
-            this.elapsed = this.player.currentTime;
-        }).catch(this.videoError);
+        this.ready().metadata().then(this.videoReady.bind(this)).catch(this.videoError);
     }
 
     set controlLayer(dom) {
@@ -30,6 +27,7 @@ export default class Initializer extends CustomControls {
         dom.appendChild(sliderParentEl);
         this.attachSlider(sliderParentEl);
         this.timeLayer = this.createTimeLayer(dom);
+        this.buttonArea = this.createButtonArea();
     }
 
 
@@ -76,6 +74,12 @@ export default class Initializer extends CustomControls {
         parentEl.appendChild(elTS);
         controlLayer.appendChild(parentEl);
         return [elTE, elTS];
+    }
+
+    videoReady() {
+        this.slider.setRange(this.player.duration);
+        this.duration = this.player.duration;
+        this.elapsed = this.player.currentTime;
     }
 
     videoError() {

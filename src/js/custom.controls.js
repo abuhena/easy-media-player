@@ -20,12 +20,23 @@ export default class CustomControls extends MediaEvents {
         elem.style.left = `${padding/2}px`;
         this.layer.appendChild(elem);
         return elem;
-    } 
+    }
+
+    createMaskLayer() {
+      const elem = document.createElement('div');
+      elem.classList.add('mask-layer');
+      this.layer.appendChild(elem);
+      return elem;
+    }
+
+    createButtonArea() {
+
+    }
 
     attachSlider(parentEl) {
         this.slider = new MrSlider('em-slider-layer');
         this.slider.appendSlider(parentEl, () => {
-            this.slider.setColorPalette({fill: '#429CE3', thumb: '#429CE3', body: '#777A78'});
+            this.slider.setColorPalette({fill: '#429CE3', thumb: '#429CE3', body: '#A4A5A4 '});
             this.addSliderListeners();
         });
     }
@@ -40,3 +51,4 @@ export default class CustomControls extends MediaEvents {
         this.timeLayer[1].innerText = cT;
     }
 }
+

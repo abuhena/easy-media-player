@@ -1,3 +1,3 @@
-export default ModalComponent {
-    
+export default class ModalComponent {
+
 }

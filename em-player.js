@@ -101,13 +101,24 @@ var CustomControls = function (_MediaEvents) {
             return elem;
         }
     }, {
+        key: 'createMaskLayer',
+        value: function createMaskLayer() {
+            var elem = document.createElement('div');
+            elem.classList.add('mask-layer');
+            this.layer.appendChild(elem);
+            return elem;
+        }
+    }, {
+        key: 'createButtonArea',
+        value: function createButtonArea() {}
+    }, {
         key: 'attachSlider',
         value: function attachSlider(parentEl) {
             var _this2 = this;
 
             this.slider = new MrSlider('em-slider-layer');
             this.slider.appendSlider(parentEl, function () {
-                _this2.slider.setColorPalette({ fill: '#429CE3', thumb: '#429CE3', body: '#777A78' });
+                _this2.slider.setColorPalette({ fill: '#429CE3', thumb: '#429CE3', body: '#A4A5A4 ' });
                 _this2.addSliderListeners();
             });
         }
@@ -189,8 +200,6 @@ var Initializer = function (_CustomControls) {
     _createClass(Initializer, [{
         key: 'customize',
         value: function customize() {
-            var _this2 = this;
-
             this.videoURL = this.player.getAttribute('src');
             var controls = this.player.getAttribute('controls');
             if (controls !== null) this.player.removeAttribute('controls');
@@ -199,12 +208,9 @@ var Initializer = function (_CustomControls) {
             this.player.style.height = dimen[1] + 'px';
             this.layer = this.createLayer();
             this.controlLayer = this.createControlLayer(this.player, this.layer);
+            this.maskLayer = this.createMaskLayer();
             this.timeLayer;
-            this.ready().metadata().then(function () {
-                _this2.slider.setRange(_this2.player.duration);
-                _this2.duration = _this2.player.duration;
-                _this2.elapsed = _this2.player.currentTime;
-            }).catch(this.videoError);
+            this.ready().metadata().then(this.videoReady.bind(this)).catch(this.videoError);
         }
     }, {
         key: 'addTitle',
@@ -249,6 +255,13 @@ var Initializer = function (_CustomControls) {
             return [elTE, elTS];
         }
     }, {
+        key: 'videoReady',
+        value: function videoReady() {
+            this.slider.setRange(this.player.duration);
+            this.duration = this.player.duration;
+            this.elapsed = this.player.currentTime;
+        }
+    }, {
         key: 'videoError',
         value: function videoError() {}
     }, {
@@ -260,6 +273,7 @@ var Initializer = function (_CustomControls) {
             dom.appendChild(sliderParentEl);
             this.attachSlider(sliderParentEl);
             this.timeLayer = this.createTimeLayer(dom);
+            this.buttonArea = this.createButtonArea();
         }
     }], [{
         key: 'screen',
@@ -332,6 +346,18 @@ exports.default = MediaEvents;
 
 },{"./component.events.js":2}],8:[function(require,module,exports){
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ModalComponent = function ModalComponent() {
+  _classCallCheck(this, ModalComponent);
+};
+
+exports.default = ModalComponent;
 
 },{}],9:[function(require,module,exports){
 'use strict';

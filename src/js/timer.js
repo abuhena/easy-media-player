@@ -10,7 +10,7 @@ export default function getTimer(mil) {
     }
     if (min >= 1) {
         const floorM = Math.floor(min);
-        if (floorM <= 9) { str += `0${floorM}:`; 
+        if (floorM <= 9) { str += `0${floorM}:`;
         } else {
             str += `${floorM}:`;
         }
