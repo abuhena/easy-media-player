@@ -1,4 +1,5 @@
 import MediaEvents from './media.events.js';
+import getTimer from './timer.js';
 export default class CustomControls extends MediaEvents {
     constructor(index) {
         super();
@@ -25,18 +26,17 @@ export default class CustomControls extends MediaEvents {
         this.slider = new MrSlider('em-slider-layer');
         this.slider.appendSlider(parentEl, () => {
             this.slider.setColorPalette({fill: '#429CE3', thumb: '#429CE3', body: '#777A78'});
+            this.addSliderListeners();
         });
     }
 
     set elapsed(currentTime) {
-        const cT = new Date.clearTime().addSeconds(currentTime).toString('mm:ss');
-        this.timeLayer[0].innerText = 'abc';
+        const cT = getTimer(currentTime * 1000);
+        this.timeLayer[0].innerText = cT;
     }
 
     set duration(duration) {
-        const cT = new Date.clearTime()
-            .addSeconds(duration)
-            .toString('mm:ss');
+        const cT = getTimer(duration * 1000);
         this.timeLayer[1].innerText = cT;
     }
 }

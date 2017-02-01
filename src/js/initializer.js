@@ -18,9 +18,6 @@ export default class Initializer extends CustomControls {
         this.timeLayer;
         this.ready().metadata().then(() => {
             this.slider.setRange(this.player.duration);
-            setTimeout(() => {
-                console.log(this.slider.getValue());
-            }, 5000);
             this.duration = this.player.duration;
             this.elapsed = this.player.currentTime;
         }).catch(this.videoError);

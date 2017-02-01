@@ -2,6 +2,51 @@
 "use strict";
 
 },{}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ComponentEvents = exports.ComponentEvents = function () {
+    function ComponentEvents() {
+        _classCallCheck(this, ComponentEvents);
+    }
+
+    _createClass(ComponentEvents, [{
+        key: "addSliderListeners",
+        value: function addSliderListeners() {
+            this.slider.events().onmouseover = this.onSliderMouseover.bind(this);
+            this.slider.events().onmousemove = this.onSliderMousemove.bind(this);
+            this.slider.events().onmouseout = this.onSliderMouseout.bind(this);
+            this.slider.events().onchange = this.onSliderChange.bind(this);
+        }
+    }, {
+        key: "onSliderMouseover",
+        value: function onSliderMouseover(value) {}
+    }, {
+        key: "onSliderMousemove",
+        value: function onSliderMousemove(value) {}
+    }, {
+        key: "onSliderMouseout",
+        value: function onSliderMouseout() {}
+    }, {
+        key: "onSliderChange",
+        value: function onSliderChange(value) {
+            this.elapsed = value.fill;
+            this.duration = this.player.duration - value.fill;
+            this.player.currentTime = value.fill;
+        }
+    }]);
+
+    return ComponentEvents;
+}();
+
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13,6 +58,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _mediaEvents = require('./media.events.js');
 
 var _mediaEvents2 = _interopRequireDefault(_mediaEvents);
+
+var _timer = require('./timer.js');
+
+var _timer2 = _interopRequireDefault(_timer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59,18 +108,19 @@ var CustomControls = function (_MediaEvents) {
             this.slider = new MrSlider('em-slider-layer');
             this.slider.appendSlider(parentEl, function () {
                 _this2.slider.setColorPalette({ fill: '#429CE3', thumb: '#429CE3', body: '#777A78' });
+                _this2.addSliderListeners();
             });
         }
     }, {
         key: 'elapsed',
         set: function set(currentTime) {
-            var cT = new Date.clearTime().addSeconds(currentTime).toString('mm:ss');
-            this.timeLayer[0].innerText = 'abc';
+            var cT = (0, _timer2.default)(currentTime * 1000);
+            this.timeLayer[0].innerText = cT;
         }
     }, {
         key: 'duration',
         set: function set(duration) {
-            var cT = new Date.clearTime().addSeconds(duration).toString('mm:ss');
+            var cT = (0, _timer2.default)(duration * 1000);
             this.timeLayer[1].innerText = cT;
         }
     }]);
@@ -80,7 +130,7 @@ var CustomControls = function (_MediaEvents) {
 
 exports.default = CustomControls;
 
-},{"./media.events.js":6}],3:[function(require,module,exports){
+},{"./media.events.js":7,"./timer.js":9}],4:[function(require,module,exports){
 'use strict';
 
 var _initializer = require('./initializer.js');
@@ -102,7 +152,7 @@ window.onload = function () {
     })();
 };
 
-},{"./initializer.js":4}],4:[function(require,module,exports){
+},{"./initializer.js":5}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -152,9 +202,6 @@ var Initializer = function (_CustomControls) {
             this.timeLayer;
             this.ready().metadata().then(function () {
                 _this2.slider.setRange(_this2.player.duration);
-                setTimeout(function () {
-                    console.log(_this2.slider.getValue());
-                }, 5000);
                 _this2.duration = _this2.player.duration;
                 _this2.elapsed = _this2.player.currentTime;
             }).catch(this.videoError);
@@ -230,10 +277,10 @@ var Initializer = function (_CustomControls) {
 
 exports.default = Initializer;
 
-},{"./custom.controls.js":2}],5:[function(require,module,exports){
+},{"./custom.controls.js":3}],6:[function(require,module,exports){
 "use strict";
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -242,11 +289,21 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _componentEvents = require('./component.events.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var MediaEvents = function () {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MediaEvents = function (_ComponentEvents) {
+    _inherits(MediaEvents, _ComponentEvents);
+
     function MediaEvents() {
         _classCallCheck(this, MediaEvents);
+
+        return _possibleConstructorReturn(this, (MediaEvents.__proto__ || Object.getPrototypeOf(MediaEvents)).call(this));
     }
 
     _createClass(MediaEvents, [{
@@ -269,11 +326,54 @@ var MediaEvents = function () {
     }]);
 
     return MediaEvents;
-}();
+}(_componentEvents.ComponentEvents);
 
 exports.default = MediaEvents;
 
-},{}],7:[function(require,module,exports){
+},{"./component.events.js":2}],8:[function(require,module,exports){
 "use strict";
 
-},{}]},{},[1,2,3,4,5,6,7]);
+},{}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getTimer;
+function getTimer(mil) {
+    var hour = mil / 1000 / 60 / 60;
+    var min = mil / 1000 / 60;
+    var sec = mil / 1000;
+    var str = '';
+    if (hour >= 1) {
+        var floorH = Math.floor(hour);
+        min = (hour - floorH) * 60;
+        str += floorH + ':';
+    }
+    if (min >= 1) {
+        var floorM = Math.floor(min);
+        if (floorM <= 9) {
+            str += '0' + floorM + ':';
+        } else {
+            str += floorM + ':';
+        }
+        sec = (min - floorM) * 60;
+    } else {
+        sec = min * 60;
+        str += '0' + Math.round(min) + ':';
+    }
+
+    if (sec >= 1) {
+        var roundS = Math.round(sec);
+        if (roundS <= 9) {
+            str += '0' + roundS;
+        } else {
+            str += roundS;
+        }
+    } else {
+        str += '00';
+    }
+    return str;
+}
+
+},{}]},{},[1,2,3,4,5,6,7,8,9]);

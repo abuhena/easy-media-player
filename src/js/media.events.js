@@ -1,5 +1,8 @@
-export default class MediaEvents {
-    constructor() {}
+import {ComponentEvents} from './component.events.js';
+export default class MediaEvents extends ComponentEvents {
+    constructor() {
+        super();
+    }
 
     ready() {
         const context = this.player;
