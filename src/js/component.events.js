@@ -1,9 +1,9 @@
 export class ComponentEvents {
     addSliderListeners() {
-        this.slider.events().onmouseover = this.onSliderMouseover.bind(this);
-        this.slider.events().onmousemove = this.onSliderMousemove.bind(this);
-        this.slider.events().onmouseout = this.onSliderMouseout.bind(this);
-        this.slider.events().onchange = this.onSliderChange.bind(this);
+        this.slider.on('mouseover', this.onSliderMouseover.bind(this));
+        this.slider.on('mousemove', this.onSliderMousemove.bind(this));
+        this.slider.on('mouseout', this.onSliderMouseout.bind(this));
+        this.slider.on('change', this.onSliderChange.bind(this));
     }
 
     onSliderMouseover(value) {
