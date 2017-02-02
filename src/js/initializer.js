@@ -27,7 +27,7 @@ export default class Initializer extends CustomControls {
         dom.appendChild(sliderParentEl);
         this.attachSlider(sliderParentEl);
         this.timeLayer = this.createTimeLayer(dom);
-        this.buttonArea = this.createButtonArea();
+        this.buttonArea = this.createButtonArea(dom);
     }
 
 

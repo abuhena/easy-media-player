@@ -25,7 +25,7 @@
     }
     .control-layer {
         position: absolute;
-        height: 150px;
+        height: 175px;
         bottom: 0px;
         color: @white;
         z-index: 5;
@@ -36,13 +36,34 @@
             padding-top: 5px;
         }
         .timer-cmp {
-            height: 15px;
             width: 100%;
+            height: 28px;
             .timer {
             font-size: 12px;
             color: @white;
             position: absolute;
             }
+        }
+        .button-layer {
+          height: 50px;
+          width: 100%;
+          .em-button {
+            height: 20px;
+            width: 20px;
+            color: @white;
+            font-size: 20px;
+            padding: 10px 15px 20px 15px;
+            background-color: @water;
+            &:active {
+              background-color: red;
+            }
+            &:hover {
+              background-color: @btnHover;
+            }
+            &:first-child {
+              margin: 0px !important;
+            }
+          }
         }
     }
     .em-modal {

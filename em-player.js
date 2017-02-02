@@ -110,7 +110,27 @@ var CustomControls = function (_MediaEvents) {
         }
     }, {
         key: 'createButtonArea',
-        value: function createButtonArea() {}
+        value: function createButtonArea(parentEl) {
+            var elem = document.createElement('div');
+            elem.classList.add('button-layer');
+            parentEl.appendChild(elem);
+            //this.createPlayButton(elem);
+            return elem;
+        }
+    }, {
+        key: 'createPlayButton',
+        value: function createPlayButton(parentEl) {
+            var elem = document.createElement('div');
+            elem.classList.add('em-button');
+            this.playButtonId = this.idPrefix + '-play-button';
+            elem.setAttribute('id', this.playButtonId);
+            elem.classList.add('em-button');
+            var childElem = document.createElement('div');
+            childElem.classList.add('fa');
+            childElem.classList.add('fa-play');
+            elem.appendChild(childElem);
+            parentEl.appendChild(elem);
+        }
     }, {
         key: 'attachSlider',
         value: function attachSlider(parentEl) {
@@ -273,7 +293,7 @@ var Initializer = function (_CustomControls) {
             dom.appendChild(sliderParentEl);
             this.attachSlider(sliderParentEl);
             this.timeLayer = this.createTimeLayer(dom);
-            this.buttonArea = this.createButtonArea();
+            this.buttonArea = this.createButtonArea(dom);
         }
     }], [{
         key: 'screen',

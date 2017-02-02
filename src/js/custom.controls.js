@@ -29,8 +29,25 @@ export default class CustomControls extends MediaEvents {
       return elem;
     }
 
-    createButtonArea() {
+    createButtonArea(parentEl) {
+        const elem = document.createElement('div');
+        elem.classList.add('button-layer');
+        parentEl.appendChild(elem);
+        //this.createPlayButton(elem);
+        return elem;
+    }
 
+    createPlayButton(parentEl) {
+      const elem = document.createElement('div');
+      elem.classList.add('em-button');
+      this.playButtonId = `${this.idPrefix}-play-button`;
+      elem.setAttribute('id', this.playButtonId);
+      elem.classList.add('em-button');
+      const childElem = document.createElement('div');
+      childElem.classList.add('fa');
+      childElem.classList.add('fa-play');
+      elem.appendChild(childElem);
+      parentEl.appendChild(elem);
     }
 
     attachSlider(parentEl) {
