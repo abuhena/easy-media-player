@@ -18,6 +18,6 @@
   ],
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "DateJS": "datejs#^1.0.0-rc3"
+    "m-range-slider": "*"
   }
 }
