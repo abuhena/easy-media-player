@@ -1,6 +1,7 @@
 import MediaEvents from './media.events.js';
 import getTimer from './timer.js';
 import playBtn from './buttons/play.js';
+import pauseBtn from './buttons/pause.js';
 import fastForwardBtn from './buttons/forward.js';
 import fastBackwardBtn from './buttons/backward.js';
 import subtitleBtn from './buttons/subtitle';
@@ -61,7 +62,12 @@ export default class CustomControls extends MediaEvents {
       elem.classList.add('em-sqeez-area');
       elem.classList.add('middle-button-area');
       elem.appendChild(fastBackwardBtn(this));
-      elem.appendChild(playBtn(this));
+      const playButtonCmp = playBtn(this);
+      playButtonCmp.addEventListener('click', this.onPlayButtonClickListener.bind(this));
+      elem.appendChild(playButtonCmp);
+      const pauseButtonCmp = pauseBtn(this);
+      pauseButtonCmp.addEventListener('click', this.onPauseButtonClickListener.bind(this));
+      elem.appendChild(pauseButtonCmp);
       elem.appendChild(fastForwardBtn(this));
       //elem.appendChild(subtitleBtn(this));
       parentEl.appendChild(elem);

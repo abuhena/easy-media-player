@@ -11,7 +11,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (context) {
   var elem = document.createElement('div');
   elem.classList.add('em-button');
-  context.playButtonId = context.idPrefix + '-fb-button';
+  context.ffButtonId = context.idPrefix + '-fb-button';
   elem.setAttribute('id', context.playButtonId);
   elem.classList.add('em-button');
   elem.classList.add('play72');
@@ -49,7 +49,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (context) {
   var elem = document.createElement('div');
   elem.classList.add('em-button');
-  context.playButtonId = context.idPrefix + '-ff-button';
+  context.fbButtonId = context.idPrefix + '-ff-button';
   elem.setAttribute('id', context.playButtonId);
   elem.classList.add('em-button');
   elem.classList.add('play72');
@@ -87,7 +87,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (context) {
   var elem = document.createElement('div');
   elem.classList.add('em-button');
-  context.playButtonId = context.idPrefix + '-fullscreen-button';
+  context.fullscreenButtonId = context.idPrefix + '-fullscreen-button';
   elem.setAttribute('id', context.playButtonId);
   elem.classList.add('em-button');
   elem.classList.add('fullscreen72');
@@ -125,7 +125,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (context) {
   var elem = document.createElement('div');
   elem.classList.add('em-button');
-  context.playButtonId = context.idPrefix + '-menu-button';
+  context.menuButtonId = context.idPrefix + '-menu-button';
   elem.setAttribute('id', context.playButtonId);
   elem.classList.add('em-button');
   elem.classList.add('menu72');
@@ -154,7 +154,43 @@ exports.default = function (context) {
 ;
 
 },{}],6:[function(require,module,exports){
-"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var elem = document.createElement('div');
+  elem.classList.add('em-button');
+  context.pauseButtonId = context.idPrefix + '-pause-button';
+  elem.setAttribute('id', context.pauseButtonId);
+  elem.classList.add('hide-me');
+  elem.classList.add('em-button');
+  elem.classList.add('play72');
+  var childElem = document.createElement('div');
+  childElem.classList.add('fa');
+  childElem.classList.add('fa-pause');
+  elem.appendChild(childElem);
+  elem.addEventListener('mousedown', function () {
+    if (!elem.classList.contains('btnActive')) {
+      elem.classList.add('btnActive');
+    }
+  });
+  elem.addEventListener('mouseup', function () {
+    if (elem.classList.contains('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  elem.addEventListener('mouseout', function () {
+    if (elem.classList.contains('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  return elem;
+};
+
+;
 
 },{}],7:[function(require,module,exports){
 'use strict';
@@ -204,7 +240,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (context) {
   var elem = document.createElement('div');
   elem.classList.add('em-button');
-  context.playButtonId = context.idPrefix + '-subtitle-button';
+  context.subtitleButtonId = context.idPrefix + '-subtitle-button';
   elem.setAttribute('id', context.playButtonId);
   elem.classList.add('em-button');
   elem.classList.add('subtitle72');
@@ -242,7 +278,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (context) {
   var elem = document.createElement('div');
   elem.classList.add('em-button');
-  context.playButtonId = context.idPrefix + '-volume-button';
+  context.volumeButtonId = context.idPrefix + '-volume-button';
   elem.setAttribute('id', context.playButtonId);
   elem.classList.add('em-button');
   elem.classList.add('play72');
@@ -274,7 +310,7 @@ exports.default = function (context) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -282,37 +318,65 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ComponentEvents = exports.ComponentEvents = function () {
-    function ComponentEvents() {
-        _classCallCheck(this, ComponentEvents);
+  function ComponentEvents() {
+    _classCallCheck(this, ComponentEvents);
+  }
+
+  _createClass(ComponentEvents, [{
+    key: 'addSliderListeners',
+    value: function addSliderListeners() {
+      this.slider.on('mouseover', this.onSliderMouseover.bind(this));
+      this.slider.on('mousemove', this.onSliderMousemove.bind(this));
+      this.slider.on('mouseout', this.onSliderMouseout.bind(this));
+      this.slider.on('change', this.onSliderChange.bind(this));
     }
+  }, {
+    key: 'onSliderMouseover',
+    value: function onSliderMouseover(value) {}
+  }, {
+    key: 'onSliderMousemove',
+    value: function onSliderMousemove(value) {}
+  }, {
+    key: 'onSliderMouseout',
+    value: function onSliderMouseout() {}
+  }, {
+    key: 'onSliderChange',
+    value: function onSliderChange(value) {
+      this.elapsed = value.fill;
+      this.duration = this.player.duration - value.fill;
+      //this.player.currentTime = value.fill;
+    }
+  }, {
+    key: 'onPlayButtonClickListener',
+    value: function onPlayButtonClickListener(event) {
+      if (this.player.paused) {
+        this.player.play();
+        this.hideComponent(document.getElementById(this.playButtonId));
+        this.showComponent(document.getElementById(this.pauseButtonId));
+      }
+    }
+  }, {
+    key: 'onPauseButtonClickListener',
+    value: function onPauseButtonClickListener(event) {
+      if (!this.player.paused) {
+        this.player.pause();
+        this.hideComponent(document.getElementById(this.pauseButtonId));
+        this.showComponent(document.getElementById(this.playButtonId));
+      }
+    }
+  }, {
+    key: 'hideComponent',
+    value: function hideComponent(target) {
+      target.classList.add('hide-me');
+    }
+  }, {
+    key: 'showComponent',
+    value: function showComponent(target) {
+      if (target.classList.contains('hide-me')) target.classList.remove('hide-me');
+    }
+  }]);
 
-    _createClass(ComponentEvents, [{
-        key: 'addSliderListeners',
-        value: function addSliderListeners() {
-            this.slider.on('mouseover', this.onSliderMouseover.bind(this));
-            this.slider.on('mousemove', this.onSliderMousemove.bind(this));
-            this.slider.on('mouseout', this.onSliderMouseout.bind(this));
-            this.slider.on('change', this.onSliderChange.bind(this));
-        }
-    }, {
-        key: 'onSliderMouseover',
-        value: function onSliderMouseover(value) {}
-    }, {
-        key: 'onSliderMousemove',
-        value: function onSliderMousemove(value) {}
-    }, {
-        key: 'onSliderMouseout',
-        value: function onSliderMouseout() {}
-    }, {
-        key: 'onSliderChange',
-        value: function onSliderChange(value) {
-            this.elapsed = value.fill;
-            this.duration = this.player.duration - value.fill;
-            this.player.currentTime = value.fill;
-        }
-    }]);
-
-    return ComponentEvents;
+  return ComponentEvents;
 }();
 
 },{}],11:[function(require,module,exports){
@@ -335,6 +399,10 @@ var _timer2 = _interopRequireDefault(_timer);
 var _play = require('./buttons/play.js');
 
 var _play2 = _interopRequireDefault(_play);
+
+var _pause = require('./buttons/pause.js');
+
+var _pause2 = _interopRequireDefault(_pause);
 
 var _forward = require('./buttons/forward.js');
 
@@ -434,7 +502,12 @@ var CustomControls = function (_MediaEvents) {
             elem.classList.add('em-sqeez-area');
             elem.classList.add('middle-button-area');
             elem.appendChild((0, _backward2.default)(this));
-            elem.appendChild((0, _play2.default)(this));
+            var playButtonCmp = (0, _play2.default)(this);
+            playButtonCmp.addEventListener('click', this.onPlayButtonClickListener.bind(this));
+            elem.appendChild(playButtonCmp);
+            var pauseButtonCmp = (0, _pause2.default)(this);
+            pauseButtonCmp.addEventListener('click', this.onPauseButtonClickListener.bind(this));
+            elem.appendChild(pauseButtonCmp);
             elem.appendChild((0, _forward2.default)(this));
             //elem.appendChild(subtitleBtn(this));
             parentEl.appendChild(elem);
@@ -479,7 +552,7 @@ var CustomControls = function (_MediaEvents) {
 
 exports.default = CustomControls;
 
-},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./media.events.js":15,"./timer.js":17}],12:[function(require,module,exports){
+},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/pause.js":6,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./media.events.js":15,"./timer.js":17}],12:[function(require,module,exports){
 'use strict';
 
 var _initializer = require('./initializer.js');
@@ -662,11 +735,13 @@ var MediaEvents = function (_ComponentEvents) {
         key: 'ready',
         value: function ready() {
             var context = this.player;
+            var classContext = this;
             return {
                 metadata: function metadata() {
                     return new Promise(function (resolve, reject) {
                         context.addEventListener('loadedmetadata', function (event) {
                             resolve(event);
+                            context.addEventListener('timeupdate', classContext.onTimeUpdate.bind(classContext));
                         });
                         context.addEventListener('error', function (event) {
                             reject(event);
@@ -674,6 +749,13 @@ var MediaEvents = function (_ComponentEvents) {
                     });
                 }
             };
+        }
+    }, {
+        key: 'onTimeUpdate',
+        value: function onTimeUpdate() {
+            this.elapsed = this.player.currentTime;
+            this.duration = this.player.currentTime - this.player.duration;
+            this.slider.setValue(this.player.currentTime);
         }
     }]);
 

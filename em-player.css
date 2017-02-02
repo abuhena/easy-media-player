@@ -154,3 +154,6 @@
 .em-player .em-modal.em-title {
   padding: 4px;
 }
+.hide-me {
+  display: none !important;
+}

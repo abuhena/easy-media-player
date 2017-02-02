@@ -6,11 +6,14 @@ export default class MediaEvents extends ComponentEvents {
 
     ready() {
         const context = this.player;
+        const classContext = this;
         return {
             metadata: () => {
                 return new Promise((resolve, reject) => {
                     context.addEventListener('loadedmetadata', event => {
                         resolve(event);
+                        context.addEventListener('timeupdate',
+                        classContext.onTimeUpdate.bind(classContext));
                     });
                     context.addEventListener('error', event => {
                         reject(event);
@@ -18,5 +21,11 @@ export default class MediaEvents extends ComponentEvents {
                 });
             }
         }
+    }
+
+    onTimeUpdate() {
+      this.elapsed = this.player.currentTime;
+      this.duration = this.player.currentTime - this.player.duration;
+      this.slider.setValue(this.player.currentTime);
     }
 }

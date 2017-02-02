@@ -1,7 +1,7 @@
 export default function (context) {
   const elem = document.createElement('div');
       elem.classList.add('em-button');
-      context.playButtonId = `${context.idPrefix}-ff-button`;
+      context.fbButtonId = `${context.idPrefix}-ff-button`;
       elem.setAttribute('id', context.playButtonId);
       elem.classList.add('em-button');
       elem.classList.add('play72');
