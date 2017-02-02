@@ -102,6 +102,17 @@
 .em-player .control-layer .button-layer .em-sqeez-area.left-button-area {
   left: 0;
   width: 100px;
+  z-index: 10;
+}
+.em-player .control-layer .button-layer .em-sqeez-area.right-button-area {
+  right: 0;
+  width: 100px;
+}
+.em-player .control-layer .button-layer .em-sqeez-area.middle-button-area {
+  text-align: center;
+  vertical-align: middle;
+  height: 50px;
+  width: 100%;
 }
 .em-player .control-layer .button-layer .em-sqeez-area .em-button {
   height: 20px;
@@ -122,6 +133,14 @@
 }
 .em-player .control-layer .button-layer .em-sqeez-area .em-button.subtitle72 {
   padding: 12px 16px 18px 14px;
+  display: inline-block;
+}
+.em-player .control-layer .button-layer .em-sqeez-area .em-button.fullscreen72 {
+  padding: 12px 13px 18px 17px;
+  display: inline-block;
+}
+.em-player .control-layer .button-layer .em-sqeez-area .em-button.menu72 {
+  padding: 12px 13px 18px 17px;
   display: inline-block;
 }
 .em-player .control-layer .button-layer .em-sqeez-area .em-button.btnActive {

@@ -1,8 +1,12 @@
 import MediaEvents from './media.events.js';
 import getTimer from './timer.js';
 import playBtn from './buttons/play.js';
+import fastForwardBtn from './buttons/forward.js';
+import fastBackwardBtn from './buttons/backward.js';
 import subtitleBtn from './buttons/subtitle';
 import volumeBtn from './buttons/volume.js';
+import fullscreenBtn from './buttons/fullscreen.js';
+import menuBtn from './buttons/menu.js';
 export default class CustomControls extends MediaEvents {
     constructor(index) {
         super();
@@ -37,6 +41,8 @@ export default class CustomControls extends MediaEvents {
         elem.classList.add('button-layer');
         parentEl.appendChild(elem);
         this.firstButtonLayer(elem);
+        this.secondButtonLayer(elem);
+        this.thirdButtonLayer(elem);
         //playBtn(elem, this);
         return elem;
     }
@@ -47,6 +53,26 @@ export default class CustomControls extends MediaEvents {
       elem.classList.add('left-button-area');
       elem.appendChild(volumeBtn(this));
       elem.appendChild(subtitleBtn(this));
+      parentEl.appendChild(elem);
+    }
+
+    secondButtonLayer(parentEl) {
+      const elem = document.createElement('div');
+      elem.classList.add('em-sqeez-area');
+      elem.classList.add('middle-button-area');
+      elem.appendChild(fastBackwardBtn(this));
+      elem.appendChild(playBtn(this));
+      elem.appendChild(fastForwardBtn(this));
+      //elem.appendChild(subtitleBtn(this));
+      parentEl.appendChild(elem);
+    }
+
+    thirdButtonLayer(parentEl) {
+      const elem = document.createElement('div');
+      elem.classList.add('em-sqeez-area');
+      elem.classList.add('right-button-area');
+      elem.appendChild(fullscreenBtn(this));
+      elem.appendChild(menuBtn(this));
       parentEl.appendChild(elem);
     }
 

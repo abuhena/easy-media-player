@@ -2,18 +2,161 @@
 "use strict";
 
 },{}],2:[function(require,module,exports){
-"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var elem = document.createElement('div');
+  elem.classList.add('em-button');
+  context.playButtonId = context.idPrefix + '-fb-button';
+  elem.setAttribute('id', context.playButtonId);
+  elem.classList.add('em-button');
+  elem.classList.add('play72');
+  var childElem = document.createElement('div');
+  childElem.classList.add('fa');
+  childElem.classList.add('fa-fast-backward');
+  elem.appendChild(childElem);
+  elem.addEventListener('mousedown', function () {
+    if (!elem.classList.toggle('btnActive')) {
+      elem.classList.add('btnActive');
+    }
+  });
+  elem.addEventListener('mouseup', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  elem.addEventListener('mouseout', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  return elem;
+};
+
+;
 
 },{}],3:[function(require,module,exports){
-"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var elem = document.createElement('div');
+  elem.classList.add('em-button');
+  context.playButtonId = context.idPrefix + '-ff-button';
+  elem.setAttribute('id', context.playButtonId);
+  elem.classList.add('em-button');
+  elem.classList.add('play72');
+  var childElem = document.createElement('div');
+  childElem.classList.add('fa');
+  childElem.classList.add('fa-fast-forward');
+  elem.appendChild(childElem);
+  elem.addEventListener('mousedown', function () {
+    if (!elem.classList.toggle('btnActive')) {
+      elem.classList.add('btnActive');
+    }
+  });
+  elem.addEventListener('mouseup', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  elem.addEventListener('mouseout', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  return elem;
+};
+
+;
 
 },{}],4:[function(require,module,exports){
-"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var elem = document.createElement('div');
+  elem.classList.add('em-button');
+  context.playButtonId = context.idPrefix + '-fullscreen-button';
+  elem.setAttribute('id', context.playButtonId);
+  elem.classList.add('em-button');
+  elem.classList.add('fullscreen72');
+  var childElem = document.createElement('div');
+  childElem.classList.add('fa');
+  childElem.classList.add('fa-expand');
+  elem.appendChild(childElem);
+  elem.addEventListener('mousedown', function () {
+    if (!elem.classList.toggle('btnActive')) {
+      elem.classList.add('btnActive');
+    }
+  });
+  elem.addEventListener('mouseup', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  elem.addEventListener('mouseout', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  return elem;
+};
+
+;
 
 },{}],5:[function(require,module,exports){
-"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var elem = document.createElement('div');
+  elem.classList.add('em-button');
+  context.playButtonId = context.idPrefix + '-menu-button';
+  elem.setAttribute('id', context.playButtonId);
+  elem.classList.add('em-button');
+  elem.classList.add('menu72');
+  var childElem = document.createElement('div');
+  childElem.classList.add('fa');
+  childElem.classList.add('fa-ellipsis-h');
+  elem.appendChild(childElem);
+  elem.addEventListener('mousedown', function () {
+    if (!elem.classList.toggle('btnActive')) {
+      elem.classList.add('btnActive');
+    }
+  });
+  elem.addEventListener('mouseup', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  elem.addEventListener('mouseout', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  return elem;
+};
+
+;
 
 },{}],6:[function(require,module,exports){
+"use strict";
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32,26 +175,26 @@ exports.default = function (context) {
   childElem.classList.add('fa-play');
   elem.appendChild(childElem);
   elem.addEventListener('mousedown', function () {
-    if (!elem.classList.toggle('btnActive')) {
+    if (!elem.classList.contains('btnActive')) {
       elem.classList.add('btnActive');
     }
   });
   elem.addEventListener('mouseup', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
   elem.addEventListener('mouseout', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
-  return context;
+  return elem;
 };
 
 ;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -89,7 +232,7 @@ exports.default = function (context) {
 
 ;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -127,7 +270,7 @@ exports.default = function (context) {
 
 ;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -172,7 +315,7 @@ var ComponentEvents = exports.ComponentEvents = function () {
     return ComponentEvents;
 }();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -193,6 +336,14 @@ var _play = require('./buttons/play.js');
 
 var _play2 = _interopRequireDefault(_play);
 
+var _forward = require('./buttons/forward.js');
+
+var _forward2 = _interopRequireDefault(_forward);
+
+var _backward = require('./buttons/backward.js');
+
+var _backward2 = _interopRequireDefault(_backward);
+
 var _subtitle = require('./buttons/subtitle');
 
 var _subtitle2 = _interopRequireDefault(_subtitle);
@@ -200,6 +351,14 @@ var _subtitle2 = _interopRequireDefault(_subtitle);
 var _volume = require('./buttons/volume.js');
 
 var _volume2 = _interopRequireDefault(_volume);
+
+var _fullscreen = require('./buttons/fullscreen.js');
+
+var _fullscreen2 = _interopRequireDefault(_fullscreen);
+
+var _menu = require('./buttons/menu.js');
+
+var _menu2 = _interopRequireDefault(_menu);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -253,6 +412,8 @@ var CustomControls = function (_MediaEvents) {
             elem.classList.add('button-layer');
             parentEl.appendChild(elem);
             this.firstButtonLayer(elem);
+            this.secondButtonLayer(elem);
+            this.thirdButtonLayer(elem);
             //playBtn(elem, this);
             return elem;
         }
@@ -264,6 +425,28 @@ var CustomControls = function (_MediaEvents) {
             elem.classList.add('left-button-area');
             elem.appendChild((0, _volume2.default)(this));
             elem.appendChild((0, _subtitle2.default)(this));
+            parentEl.appendChild(elem);
+        }
+    }, {
+        key: 'secondButtonLayer',
+        value: function secondButtonLayer(parentEl) {
+            var elem = document.createElement('div');
+            elem.classList.add('em-sqeez-area');
+            elem.classList.add('middle-button-area');
+            elem.appendChild((0, _backward2.default)(this));
+            elem.appendChild((0, _play2.default)(this));
+            elem.appendChild((0, _forward2.default)(this));
+            //elem.appendChild(subtitleBtn(this));
+            parentEl.appendChild(elem);
+        }
+    }, {
+        key: 'thirdButtonLayer',
+        value: function thirdButtonLayer(parentEl) {
+            var elem = document.createElement('div');
+            elem.classList.add('em-sqeez-area');
+            elem.classList.add('right-button-area');
+            elem.appendChild((0, _fullscreen2.default)(this));
+            elem.appendChild((0, _menu2.default)(this));
             parentEl.appendChild(elem);
         }
     }, {
@@ -296,7 +479,7 @@ var CustomControls = function (_MediaEvents) {
 
 exports.default = CustomControls;
 
-},{"./buttons/play.js":6,"./buttons/subtitle":7,"./buttons/volume.js":8,"./media.events.js":14,"./timer.js":16}],11:[function(require,module,exports){
+},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./media.events.js":15,"./timer.js":17}],12:[function(require,module,exports){
 'use strict';
 
 var _initializer = require('./initializer.js');
@@ -318,7 +501,7 @@ window.onload = function () {
     })();
 };
 
-},{"./initializer.js":12}],12:[function(require,module,exports){
+},{"./initializer.js":13}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -446,10 +629,10 @@ var Initializer = function (_CustomControls) {
 
 exports.default = Initializer;
 
-},{"./custom.controls.js":10}],13:[function(require,module,exports){
+},{"./custom.controls.js":11}],14:[function(require,module,exports){
 "use strict";
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -499,7 +682,7 @@ var MediaEvents = function (_ComponentEvents) {
 
 exports.default = MediaEvents;
 
-},{"./component.events.js":9}],15:[function(require,module,exports){
+},{"./component.events.js":10}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -559,7 +742,7 @@ var ModalComponent = function () {
 
 exports.default = ModalComponent;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -602,4 +785,4 @@ function getTimer(mil) {
     return str;
 }
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);
