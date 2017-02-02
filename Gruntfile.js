@@ -16,7 +16,7 @@ module.exports = grunt => {
         tasks: ['less'],
       },
       scripts: {
-        files: ['src/js/*.js'],
+        files: ['src/js/{,*/}*.js'],
         tasks: ['browserify'],
       },
     },

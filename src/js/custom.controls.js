@@ -1,5 +1,8 @@
 import MediaEvents from './media.events.js';
 import getTimer from './timer.js';
+import playBtn from './buttons/play.js';
+import subtitleBtn from './buttons/subtitle';
+import volumeBtn from './buttons/volume.js';
 export default class CustomControls extends MediaEvents {
     constructor(index) {
         super();
@@ -33,20 +36,17 @@ export default class CustomControls extends MediaEvents {
         const elem = document.createElement('div');
         elem.classList.add('button-layer');
         parentEl.appendChild(elem);
-        //this.createPlayButton(elem);
+        this.firstButtonLayer(elem);
+        //playBtn(elem, this);
         return elem;
     }
 
-    createPlayButton(parentEl) {
+    firstButtonLayer(parentEl) {
       const elem = document.createElement('div');
-      elem.classList.add('em-button');
-      this.playButtonId = `${this.idPrefix}-play-button`;
-      elem.setAttribute('id', this.playButtonId);
-      elem.classList.add('em-button');
-      const childElem = document.createElement('div');
-      childElem.classList.add('fa');
-      childElem.classList.add('fa-play');
-      elem.appendChild(childElem);
+      elem.classList.add('em-sqeez-area');
+      elem.classList.add('left-button-area');
+      elem.appendChild(volumeBtn(this));
+      elem.appendChild(subtitleBtn(this));
       parentEl.appendChild(elem);
     }
 

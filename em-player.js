@@ -4,6 +4,132 @@
 },{}],2:[function(require,module,exports){
 "use strict";
 
+},{}],3:[function(require,module,exports){
+"use strict";
+
+},{}],4:[function(require,module,exports){
+"use strict";
+
+},{}],5:[function(require,module,exports){
+"use strict";
+
+},{}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var elem = document.createElement('div');
+  elem.classList.add('em-button');
+  context.playButtonId = context.idPrefix + '-play-button';
+  elem.setAttribute('id', context.playButtonId);
+  elem.classList.add('em-button');
+  elem.classList.add('play72');
+  var childElem = document.createElement('div');
+  childElem.classList.add('fa');
+  childElem.classList.add('fa-play');
+  elem.appendChild(childElem);
+  elem.addEventListener('mousedown', function () {
+    if (!elem.classList.toggle('btnActive')) {
+      elem.classList.add('btnActive');
+    }
+  });
+  elem.addEventListener('mouseup', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  elem.addEventListener('mouseout', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  return context;
+};
+
+;
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var elem = document.createElement('div');
+  elem.classList.add('em-button');
+  context.playButtonId = context.idPrefix + '-subtitle-button';
+  elem.setAttribute('id', context.playButtonId);
+  elem.classList.add('em-button');
+  elem.classList.add('subtitle72');
+  var childElem = document.createElement('div');
+  childElem.classList.add('fa');
+  childElem.classList.add('fa-newspaper-o');
+  elem.appendChild(childElem);
+  elem.addEventListener('mousedown', function () {
+    if (!elem.classList.toggle('btnActive')) {
+      elem.classList.add('btnActive');
+    }
+  });
+  elem.addEventListener('mouseup', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  elem.addEventListener('mouseout', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  return elem;
+};
+
+;
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var elem = document.createElement('div');
+  elem.classList.add('em-button');
+  context.playButtonId = context.idPrefix + '-volume-button';
+  elem.setAttribute('id', context.playButtonId);
+  elem.classList.add('em-button');
+  elem.classList.add('play72');
+  var childElem = document.createElement('div');
+  childElem.classList.add('fa');
+  childElem.classList.add('fa-volume-up');
+  elem.appendChild(childElem);
+  elem.addEventListener('mousedown', function () {
+    if (!elem.classList.toggle('btnActive')) {
+      elem.classList.add('btnActive');
+    }
+  });
+  elem.addEventListener('mouseup', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  elem.addEventListener('mouseout', function () {
+    if (elem.classList.toggle('btnActive')) {
+      elem.classList.remove('btnActive');
+    }
+  });
+  return elem;
+};
+
+;
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -18,24 +144,24 @@ var ComponentEvents = exports.ComponentEvents = function () {
     }
 
     _createClass(ComponentEvents, [{
-        key: "addSliderListeners",
+        key: 'addSliderListeners',
         value: function addSliderListeners() {
-            this.slider.events().onmouseover = this.onSliderMouseover.bind(this);
-            this.slider.events().onmousemove = this.onSliderMousemove.bind(this);
-            this.slider.events().onmouseout = this.onSliderMouseout.bind(this);
-            this.slider.events().onchange = this.onSliderChange.bind(this);
+            this.slider.on('mouseover', this.onSliderMouseover.bind(this));
+            this.slider.on('mousemove', this.onSliderMousemove.bind(this));
+            this.slider.on('mouseout', this.onSliderMouseout.bind(this));
+            this.slider.on('change', this.onSliderChange.bind(this));
         }
     }, {
-        key: "onSliderMouseover",
+        key: 'onSliderMouseover',
         value: function onSliderMouseover(value) {}
     }, {
-        key: "onSliderMousemove",
+        key: 'onSliderMousemove',
         value: function onSliderMousemove(value) {}
     }, {
-        key: "onSliderMouseout",
+        key: 'onSliderMouseout',
         value: function onSliderMouseout() {}
     }, {
-        key: "onSliderChange",
+        key: 'onSliderChange',
         value: function onSliderChange(value) {
             this.elapsed = value.fill;
             this.duration = this.player.duration - value.fill;
@@ -46,7 +172,7 @@ var ComponentEvents = exports.ComponentEvents = function () {
     return ComponentEvents;
 }();
 
-},{}],3:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62,6 +188,18 @@ var _mediaEvents2 = _interopRequireDefault(_mediaEvents);
 var _timer = require('./timer.js');
 
 var _timer2 = _interopRequireDefault(_timer);
+
+var _play = require('./buttons/play.js');
+
+var _play2 = _interopRequireDefault(_play);
+
+var _subtitle = require('./buttons/subtitle');
+
+var _subtitle2 = _interopRequireDefault(_subtitle);
+
+var _volume = require('./buttons/volume.js');
+
+var _volume2 = _interopRequireDefault(_volume);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -114,21 +252,18 @@ var CustomControls = function (_MediaEvents) {
             var elem = document.createElement('div');
             elem.classList.add('button-layer');
             parentEl.appendChild(elem);
-            //this.createPlayButton(elem);
+            this.firstButtonLayer(elem);
+            //playBtn(elem, this);
             return elem;
         }
     }, {
-        key: 'createPlayButton',
-        value: function createPlayButton(parentEl) {
+        key: 'firstButtonLayer',
+        value: function firstButtonLayer(parentEl) {
             var elem = document.createElement('div');
-            elem.classList.add('em-button');
-            this.playButtonId = this.idPrefix + '-play-button';
-            elem.setAttribute('id', this.playButtonId);
-            elem.classList.add('em-button');
-            var childElem = document.createElement('div');
-            childElem.classList.add('fa');
-            childElem.classList.add('fa-play');
-            elem.appendChild(childElem);
+            elem.classList.add('em-sqeez-area');
+            elem.classList.add('left-button-area');
+            elem.appendChild((0, _volume2.default)(this));
+            elem.appendChild((0, _subtitle2.default)(this));
             parentEl.appendChild(elem);
         }
     }, {
@@ -161,7 +296,7 @@ var CustomControls = function (_MediaEvents) {
 
 exports.default = CustomControls;
 
-},{"./media.events.js":7,"./timer.js":9}],4:[function(require,module,exports){
+},{"./buttons/play.js":6,"./buttons/subtitle":7,"./buttons/volume.js":8,"./media.events.js":14,"./timer.js":16}],11:[function(require,module,exports){
 'use strict';
 
 var _initializer = require('./initializer.js');
@@ -183,7 +318,7 @@ window.onload = function () {
     })();
 };
 
-},{"./initializer.js":5}],5:[function(require,module,exports){
+},{"./initializer.js":12}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -311,10 +446,10 @@ var Initializer = function (_CustomControls) {
 
 exports.default = Initializer;
 
-},{"./custom.controls.js":3}],6:[function(require,module,exports){
+},{"./custom.controls.js":10}],13:[function(require,module,exports){
 "use strict";
 
-},{}],7:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -364,22 +499,67 @@ var MediaEvents = function (_ComponentEvents) {
 
 exports.default = MediaEvents;
 
-},{"./component.events.js":2}],8:[function(require,module,exports){
-"use strict";
+},{"./component.events.js":9}],15:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ModalComponent = function ModalComponent() {
-  _classCallCheck(this, ModalComponent);
-};
+var ModalComponent = function () {
+  function ModalComponent() {
+    _classCallCheck(this, ModalComponent);
+
+    this.attribute = 'data-em-cmp-title';
+  }
+
+  _createClass(ModalComponent, [{
+    key: 'bindTitle',
+
+
+    /**
+     * @param parentContext
+     */
+    value: function bindTitle(parentContext) {
+      var nodes = ModalComponent.getElementsByAttribute(this.attribute, parentContext);
+      this.currentContext = parentContext;
+      nodes.forEach(function (eachNode) {
+        //eachNode.addEventListener('mouseover', this);
+      });
+    }
+
+    /**
+     * @param attribute
+     * @param context
+     * @returns {Array}
+     */
+
+  }], [{
+    key: 'getElementsByAttribute',
+    value: function getElementsByAttribute(attribute, context) {
+      var nodeList = (context || document).getElementsByTagName('*');
+      var nodeArray = [];
+      var iterator = 0;
+      var node = null;
+
+      /* eslint-disable no-cond-assign*/
+      while (node = nodeList[iterator++]) {
+        if (node.hasAttribute(attribute)) nodeArray.push(node);
+      }
+      return nodeArray;
+    }
+  }]);
+
+  return ModalComponent;
+}();
 
 exports.default = ModalComponent;
 
-},{}],9:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -422,4 +602,4 @@ function getTimer(mil) {
     return str;
 }
 
-},{}]},{},[1,2,3,4,5,6,7,8,9]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
