@@ -20,17 +20,17 @@ exports.default = function (context) {
   childElem.classList.add('fa-fast-backward');
   elem.appendChild(childElem);
   elem.addEventListener('mousedown', function () {
-    if (!elem.classList.toggle('btnActive')) {
+    if (!elem.classList.contains('btnActive')) {
       elem.classList.add('btnActive');
     }
   });
   elem.addEventListener('mouseup', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
   elem.addEventListener('mouseout', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
@@ -58,17 +58,17 @@ exports.default = function (context) {
   childElem.classList.add('fa-fast-forward');
   elem.appendChild(childElem);
   elem.addEventListener('mousedown', function () {
-    if (!elem.classList.toggle('btnActive')) {
+    if (!elem.classList.contains('btnActive')) {
       elem.classList.add('btnActive');
     }
   });
   elem.addEventListener('mouseup', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
   elem.addEventListener('mouseout', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
@@ -96,17 +96,17 @@ exports.default = function (context) {
   childElem.classList.add('fa-expand');
   elem.appendChild(childElem);
   elem.addEventListener('mousedown', function () {
-    if (!elem.classList.toggle('btnActive')) {
+    if (!elem.classList.contains('btnActive')) {
       elem.classList.add('btnActive');
     }
   });
   elem.addEventListener('mouseup', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
   elem.addEventListener('mouseout', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
@@ -134,17 +134,17 @@ exports.default = function (context) {
   childElem.classList.add('fa-ellipsis-h');
   elem.appendChild(childElem);
   elem.addEventListener('mousedown', function () {
-    if (!elem.classList.toggle('btnActive')) {
+    if (!elem.classList.contains('btnActive')) {
       elem.classList.add('btnActive');
     }
   });
   elem.addEventListener('mouseup', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
   elem.addEventListener('mouseout', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
@@ -213,17 +213,17 @@ exports.default = function (context) {
   childElem.classList.add('fa-newspaper-o');
   elem.appendChild(childElem);
   elem.addEventListener('mousedown', function () {
-    if (!elem.classList.toggle('btnActive')) {
+    if (!elem.classList.contains('btnActive')) {
       elem.classList.add('btnActive');
     }
   });
   elem.addEventListener('mouseup', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
   elem.addEventListener('mouseout', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
@@ -251,17 +251,17 @@ exports.default = function (context) {
   childElem.classList.add('fa-volume-up');
   elem.appendChild(childElem);
   elem.addEventListener('mousedown', function () {
-    if (!elem.classList.toggle('btnActive')) {
+    if (!elem.classList.contains('btnActive')) {
       elem.classList.add('btnActive');
     }
   });
   elem.addEventListener('mouseup', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });
   elem.addEventListener('mouseout', function () {
-    if (elem.classList.toggle('btnActive')) {
+    if (elem.classList.contains('btnActive')) {
       elem.classList.remove('btnActive');
     }
   });

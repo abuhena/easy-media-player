@@ -10,17 +10,17 @@ export default function (context) {
       childElem.classList.add('fa-fast-backward');
       elem.appendChild(childElem);
       elem.addEventListener('mousedown', () => {
-        if (!elem.classList.toggle('btnActive')) {
+        if (!elem.classList.contains('btnActive')) {
           elem.classList.add('btnActive');
         }
       });
       elem.addEventListener('mouseup', () => {
-        if (elem.classList.toggle('btnActive')) {
+        if (elem.classList.contains('btnActive')) {
           elem.classList.remove('btnActive');
         }
       });
       elem.addEventListener('mouseout', () => {
-        if (elem.classList.toggle('btnActive')) {
+        if (elem.classList.contains('btnActive')) {
           elem.classList.remove('btnActive');
         }
       });
