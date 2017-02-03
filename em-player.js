@@ -731,7 +731,7 @@ exports.default = Initializer;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -745,43 +745,58 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var MediaEvents = function (_ComponentEvents) {
-    _inherits(MediaEvents, _ComponentEvents);
+  _inherits(MediaEvents, _ComponentEvents);
 
-    function MediaEvents() {
-        _classCallCheck(this, MediaEvents);
+  function MediaEvents() {
+    _classCallCheck(this, MediaEvents);
 
-        return _possibleConstructorReturn(this, (MediaEvents.__proto__ || Object.getPrototypeOf(MediaEvents)).call(this));
+    return _possibleConstructorReturn(this, (MediaEvents.__proto__ || Object.getPrototypeOf(MediaEvents)).call(this));
+  }
+
+  _createClass(MediaEvents, [{
+    key: 'ready',
+    value: function ready() {
+      var context = this.player;
+      var classContext = this;
+      return {
+        metadata: function metadata() {
+          return new Promise(function (resolve, reject) {
+            context.addEventListener('loadeddata', function (event) {
+              console.log('resolved');
+              resolve(event);
+              context.addEventListener('timeupdate', classContext.onTimeUpdate.bind(classContext));
+              context.addEventListener('play', classContext.onPlayListener.bind(classContext));
+              context.addEventListener('playing', classContext.onAfterPlayListener.bind(classContext));
+            });
+            context.addEventListener('error', function (event) {
+              reject(event);
+            });
+          });
+        }
+      };
     }
+  }, {
+    key: 'onTimeUpdate',
+    value: function onTimeUpdate() {
+      this.elapsed = this.player.currentTime;
+      this.duration = this.player.duration - this.player.currentTime;
+      this.slider.setValue(this.player.currentTime);
+    }
+  }, {
+    key: 'onPlayListener',
+    value: function onPlayListener() {
+      this.hideComponent(document.getElementById(this.playButtonId));
+      this.showComponent(document.getElementById(this.pauseButtonId));
+    }
+  }, {
+    key: 'onAfterPlayListener',
+    value: function onAfterPlayListener() {
+      this.hideComponent(document.getElementById(this.playButtonId));
+      this.showComponent(document.getElementById(this.pauseButtonId));
+    }
+  }]);
 
-    _createClass(MediaEvents, [{
-        key: 'ready',
-        value: function ready() {
-            var context = this.player;
-            var classContext = this;
-            return {
-                metadata: function metadata() {
-                    return new Promise(function (resolve, reject) {
-                        context.addEventListener('loadedmetadata', function (event) {
-                            resolve(event);
-                            context.addEventListener('timeupdate', classContext.onTimeUpdate.bind(classContext));
-                        });
-                        context.addEventListener('error', function (event) {
-                            reject(event);
-                        });
-                    });
-                }
-            };
-        }
-    }, {
-        key: 'onTimeUpdate',
-        value: function onTimeUpdate() {
-            this.elapsed = this.player.currentTime;
-            this.duration = this.player.duration - this.player.currentTime;
-            this.slider.setValue(this.player.currentTime);
-        }
-    }]);
-
-    return MediaEvents;
+  return MediaEvents;
 }(_componentEvents.ComponentEvents);
 
 exports.default = MediaEvents;
