@@ -387,6 +387,17 @@ var ComponentEvents = exports.ComponentEvents = function () {
       }
     }
   }, {
+    key: 'onLayerClick',
+    value: function onLayerClick(event) {
+      if (event.target === this.layer) {
+        if (this.player.paused) {
+          this.player.play();
+        } else {
+          this.player.pause();
+        }
+      }
+    }
+  }, {
     key: 'hideComponent',
     value: function hideComponent(target) {
       target.classList.add('hide-me');
@@ -666,6 +677,7 @@ var Initializer = function (_CustomControls) {
             el.style.height = this.player.style.height;
             el.style.left = this.player.offsetLeft + 'px';
             el.style.top = this.player.offsetTop + 'px';
+            el.addEventListener('click', this.onLayerClick.bind(this));
             this.player.parentNode.insertBefore(el, this.player.nextSibling);
             return el;
         }
@@ -767,6 +779,7 @@ var MediaEvents = function (_ComponentEvents) {
               context.addEventListener('timeupdate', classContext.onTimeUpdate.bind(classContext));
               context.addEventListener('play', classContext.onPlayListener.bind(classContext));
               context.addEventListener('playing', classContext.onAfterPlayListener.bind(classContext));
+              context.addEventListener('pause', classContext.onPauseListener.bind(classContext));
             });
             context.addEventListener('error', function (event) {
               reject(event);
@@ -793,6 +806,12 @@ var MediaEvents = function (_ComponentEvents) {
     value: function onAfterPlayListener() {
       this.hideComponent(document.getElementById(this.playButtonId));
       this.showComponent(document.getElementById(this.pauseButtonId));
+    }
+  }, {
+    key: 'onPauseListener',
+    value: function onPauseListener() {
+      this.showComponent(document.getElementById(this.playButtonId));
+      this.hideComponent(document.getElementById(this.pauseButtonId));
     }
   }]);
 

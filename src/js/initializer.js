@@ -55,6 +55,7 @@ export default class Initializer extends CustomControls {
         el.style.height = this.player.style.height;
         el.style.left = `${this.player.offsetLeft}px`;
         el.style.top = `${this.player.offsetTop}px`;
+        el.addEventListener('click', this.onLayerClick.bind(this));
         this.player.parentNode.insertBefore(el, this.player.nextSibling);
         return el;
     }

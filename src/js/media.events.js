@@ -19,6 +19,8 @@ export default class MediaEvents extends ComponentEvents {
                 classContext.onPlayListener.bind(classContext));
                 context.addEventListener('playing',
                 classContext.onAfterPlayListener.bind(classContext));
+                context.addEventListener('pause',
+                classContext.onPauseListener.bind(classContext));
               });
               context.addEventListener('error', event => {
                 reject(event);
@@ -40,5 +42,9 @@ export default class MediaEvents extends ComponentEvents {
     onAfterPlayListener() {
       this.hideComponent(document.getElementById(this.playButtonId));
       this.showComponent(document.getElementById(this.pauseButtonId));
+    }
+    onPauseListener() {
+      this.showComponent(document.getElementById(this.playButtonId));
+      this.hideComponent(document.getElementById(this.pauseButtonId));
     }
 }

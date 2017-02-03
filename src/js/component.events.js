@@ -50,6 +50,16 @@ export class ComponentEvents {
       }
     }
 
+    onLayerClick(event) {
+      if (event.target === this.layer) {
+        if (this.player.paused) {
+        this.player.play();
+      } else{
+        this.player.pause();
+      }
+      }
+    }
+
     hideComponent(target) {
       target.classList.add('hide-me');
     }
