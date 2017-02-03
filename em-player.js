@@ -327,6 +327,9 @@ var ComponentEvents = exports.ComponentEvents = function () {
     value: function addSliderListeners() {
       this.slider.on('mouseover', this.onSliderMouseover.bind(this));
       this.slider.on('mousemove', this.onSliderMousemove.bind(this));
+      this.slider.on('mousedown', this.onSliderMousedown.bind(this));
+      this.slider.on('mouseup', this.onSliderMouseup.bind(this));
+      this.slider.on('click', this.onSliderSeek.bind(this));
       this.slider.on('mouseout', this.onSliderMouseout.bind(this));
       this.slider.on('change', this.onSliderChange.bind(this));
     }
@@ -337,14 +340,33 @@ var ComponentEvents = exports.ComponentEvents = function () {
     key: 'onSliderMousemove',
     value: function onSliderMousemove(value) {}
   }, {
+    key: 'onSliderMousedown',
+    value: function onSliderMousedown() {
+      this.sliderMouseDown = true;
+    }
+  }, {
+    key: 'onSliderMouseup',
+    value: function onSliderMouseup(value) {
+      this.sliderMouseDown = false;
+    }
+  }, {
     key: 'onSliderMouseout',
     value: function onSliderMouseout() {}
   }, {
+    key: 'onSliderSeek',
+    value: function onSliderSeek() {
+      this.elapsed = this.slider.getValue();
+      this.duration = this.player.duration - this.slider.getValue();
+      this.player.currentTime = this.slider.getValue();
+    }
+  }, {
     key: 'onSliderChange',
     value: function onSliderChange(value) {
-      this.elapsed = value.fill;
-      this.duration = this.player.duration - value.fill;
-      //this.player.currentTime = value.fill;
+      if (this.sliderMouseDown) {
+        this.elapsed = value.fill;
+        this.duration = this.player.duration - value.fill;
+        this.player.currentTime = value.fill;
+      }
     }
   }, {
     key: 'onPlayButtonClickListener',
@@ -754,7 +776,7 @@ var MediaEvents = function (_ComponentEvents) {
         key: 'onTimeUpdate',
         value: function onTimeUpdate() {
             this.elapsed = this.player.currentTime;
-            this.duration = this.player.currentTime - this.player.duration;
+            this.duration = this.player.duration - this.player.currentTime;
             this.slider.setValue(this.player.currentTime);
         }
     }]);

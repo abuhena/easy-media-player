@@ -25,7 +25,7 @@ export default class MediaEvents extends ComponentEvents {
 
     onTimeUpdate() {
       this.elapsed = this.player.currentTime;
-      this.duration = this.player.currentTime - this.player.duration;
+      this.duration = this.player.duration - this.player.currentTime;
       this.slider.setValue(this.player.currentTime);
     }
 }
