@@ -13,32 +13,16 @@ export default class MediaEvents extends ComponentEvents {
             let resolved = false;
             context.addEventListener('loadedmetadata', event => {
               if (!resolved) {
+                resolved = true;
                 resolve(event);
                 classContext.bindMediaEvents();
-                resolved = true;
               }
             });
             context.addEventListener('loadeddata', event => {
               if (!resolved) {
+                resolved = true;
                 resolve(event);
                 classContext.bindMediaEvents();
-                resolved = true;
-              }
-            });
-
-            context.addEventListener('load', event => {
-              alert('what an event');
-              if (!resolved) {
-                resolve(event);
-                classContext.bindMediaEvents();
-                resolved = true;
-              }
-            });
-            context.addEventListener('canplay', event => {
-              if (!resolved) {
-                resolve(event);
-                classContext.bindMediaEvents();
-                resolved = true;
               }
             });
               context.addEventListener('error', event => {
@@ -50,7 +34,6 @@ export default class MediaEvents extends ComponentEvents {
     }
 
     bindMediaEvents() {
-              alert('hola');
       this.player.addEventListener('timeupdate',
       this.onTimeUpdate.bind(this));
       this.player.addEventListener('play',
@@ -62,8 +45,8 @@ export default class MediaEvents extends ComponentEvents {
     }
 
     onTimeUpdate() {
-      this.elapsed = this.player.currentTime;
-      this.duration = this.player.duration - this.player.currentTime;
+      this.elapsed = Math.floor(this.player.currentTime);
+      this.duration = Math.floor(this.player.duration - this.player.currentTime);
       this.slider.setValue(this.player.currentTime);
     }
     onPlayListener() {

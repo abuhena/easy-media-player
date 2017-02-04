@@ -3,6 +3,7 @@ export default function (context) {
       elem.classList.add('em-button');
       context.volumeButtonId = `${context.idPrefix}-volume-button`;
       elem.setAttribute('id', context.playButtonId);
+      elem.setAttribute('data-em-cmp-title', 'Show volume menu');
       elem.classList.add('em-button');
       elem.classList.add('play72');
       const childElem = document.createElement('div');

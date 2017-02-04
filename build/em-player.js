@@ -206,6 +206,7 @@ exports.default = function (context) {
   elem.classList.add('em-button');
   context.playButtonId = context.idPrefix + '-play-button';
   elem.setAttribute('id', context.playButtonId);
+  elem.setAttribute('data-em-cmp-title', 'play');
   elem.classList.add('em-button');
   elem.classList.add('play72');
   var childElem = document.createElement('div');
@@ -282,6 +283,7 @@ exports.default = function (context) {
   elem.classList.add('em-button');
   context.volumeButtonId = context.idPrefix + '-volume-button';
   elem.setAttribute('id', context.playButtonId);
+  elem.setAttribute('data-em-cmp-title', 'Show volume menu');
   elem.classList.add('em-button');
   elem.classList.add('play72');
   var childElem = document.createElement('div');
@@ -448,6 +450,10 @@ var _custom = require('./custom.controls');
 
 var _custom2 = _interopRequireDefault(_custom);
 
+var _modal = require('./modal.components');
+
+var _modal2 = _interopRequireDefault(_modal);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -478,6 +484,7 @@ var CreatePlayer = function (_CustomControls) {
       var currentParent = this.player.parentNode;
       var removedPosition = CreatePlayer.removeFrom(currentParent, this.player);
       var elem = document.createElement('video');
+      elem.classList.add('em-video');
       elem.setAttribute('src', this.videoURL);
       elem.style.width = dimen[0] + 'px';
       elem.style.height = dimen[1] + 'px';
@@ -503,6 +510,7 @@ var CreatePlayer = function (_CustomControls) {
       el.style.top = this.player.offsetTop + 'px';
       el.addEventListener('click', this.onLayerClick.bind(this));
       this.player.parentNode.insertBefore(el, this.player.nextSibling);
+      this.modalInstance = _modal2.default.getInstance(el);
       return el;
     }
   }, {
@@ -540,7 +548,7 @@ var CreatePlayer = function (_CustomControls) {
 
 exports.default = CreatePlayer;
 
-},{"./custom.controls":12}],12:[function(require,module,exports){
+},{"./custom.controls":12,"./modal.components":17}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -864,32 +872,16 @@ var MediaEvents = function (_ComponentEvents) {
             var resolved = false;
             context.addEventListener('loadedmetadata', function (event) {
               if (!resolved) {
+                resolved = true;
                 resolve(event);
                 classContext.bindMediaEvents();
-                resolved = true;
               }
             });
             context.addEventListener('loadeddata', function (event) {
               if (!resolved) {
+                resolved = true;
                 resolve(event);
                 classContext.bindMediaEvents();
-                resolved = true;
-              }
-            });
-
-            context.addEventListener('load', function (event) {
-              alert('what an event');
-              if (!resolved) {
-                resolve(event);
-                classContext.bindMediaEvents();
-                resolved = true;
-              }
-            });
-            context.addEventListener('canplay', function (event) {
-              if (!resolved) {
-                resolve(event);
-                classContext.bindMediaEvents();
-                resolved = true;
               }
             });
             context.addEventListener('error', function (event) {
@@ -902,7 +894,6 @@ var MediaEvents = function (_ComponentEvents) {
   }, {
     key: 'bindMediaEvents',
     value: function bindMediaEvents() {
-      alert('hola');
       this.player.addEventListener('timeupdate', this.onTimeUpdate.bind(this));
       this.player.addEventListener('play', this.onPlayListener.bind(this));
       this.player.addEventListener('playing', this.onAfterPlayListener.bind(this));
@@ -911,8 +902,8 @@ var MediaEvents = function (_ComponentEvents) {
   }, {
     key: 'onTimeUpdate',
     value: function onTimeUpdate() {
-      this.elapsed = this.player.currentTime;
-      this.duration = this.player.duration - this.player.currentTime;
+      this.elapsed = Math.floor(this.player.currentTime);
+      this.duration = Math.floor(this.player.duration - this.player.currentTime);
       this.slider.setValue(this.player.currentTime);
     }
   }, {
@@ -951,26 +942,80 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ModalComponent = function () {
-  function ModalComponent() {
-    _classCallCheck(this, ModalComponent);
+var singleton = Symbol();
+var singletonEnforcer = Symbol();
 
-    this.attribute = 'data-em-cmp-title';
+var ModalComponents = function () {
+  function ModalComponents(enforcer, areaNode) {
+    var _this = this;
+
+    _classCallCheck(this, ModalComponents);
+
+    if (enforcer !== singletonEnforcer) throw new Error('Cannot construct singleton');
+    this.titleAttribute = 'data-em-cmp-title';
+    this.areaNode = areaNode;
+    var observer = new MutationObserver(function (type) {
+      _this.addToEvent(areaNode);
+    });
+    observer.observe(areaNode, { childList: true });
+    this.timeoutInstance;
   }
 
-  _createClass(ModalComponent, [{
-    key: 'bindTitle',
+  _createClass(ModalComponents, [{
+    key: 'addToEvent',
+    value: function addToEvent(areaNode) {
+      var _this2 = this;
 
+      var nodes = ModalComponents.getElementsByAttribute(this.titleAttribute, areaNode);
+      nodes.forEach(function (eachNode) {
+        eachNode.addEventListener('mousemove', _this2.bindTitle.bind(_this2));
+        eachNode.addEventListener('mouseout', _this2.removeTitle.bind(_this2));
+      });
+    }
 
     /**
      * @param parentContext
      */
-    value: function bindTitle(parentContext) {
-      var nodes = ModalComponent.getElementsByAttribute(this.attribute, parentContext);
-      this.currentContext = parentContext;
-      nodes.forEach(function (eachNode) {
-        //eachNode.addEventListener('mouseover', this);
-      });
+
+  }, {
+    key: 'bindTitle',
+    value: function bindTitle(event) {
+      var _this3 = this;
+
+      this.timeoutInstance = setTimeout(function () {
+        _this3.createTitleBox(_this3.getText(event.target), { x: event.pageX, y: event.pageY });
+        setTimeout(function () {
+          _this3.removeTitle();
+        }, 5000);
+      }, 1500);
+    }
+  }, {
+    key: 'removeTitle',
+    value: function removeTitle() {
+      clearTimeout(this.timeoutInstance);
+      var el = document.getElementById('data-em-title-component');
+      if (el && el.parentNode) {
+        el.parentNode.removeChild(el);
+      }
+    }
+  }, {
+    key: 'createTitleBox',
+    value: function createTitleBox(text, position, context) {
+      if (!document.getElementById('data-em-title-component')) {
+        var elem = document.createElement('div');
+        elem.setAttribute('id', 'data-em-title-component');
+        elem.classList.add('em-modal');
+        elem.classList.add('em-title');
+        elem.classList.add('animated');
+        elem.classList.add('fadeIn');
+        elem.innerText = text;
+        elem.style.left = position.x + 'px';
+        elem.style.top = position.y - 50 + 'px';
+        (context || document.body).appendChild(elem);
+        elem.style.left = position.x - elem.clientWidth / 2 + 'px';
+        return elem;
+      }
+      return null;
     }
 
     /**
@@ -979,7 +1024,25 @@ var ModalComponent = function () {
      * @returns {Array}
      */
 
+  }, {
+    key: 'getText',
+    value: function getText(elem) {
+      if (elem && elem.hasAttribute(this.titleAttribute)) {
+        return elem.getAttribute(this.titleAttribute);
+      }
+      return this.getText(elem.parentNode);
+    }
   }], [{
+    key: 'getInstance',
+    value: function getInstance() {
+      var context = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+
+      if (!this[singleton]) {
+        this[singleton] = new ModalComponents(singletonEnforcer, context);
+      }
+      return this[singleton];
+    }
+  }, {
     key: 'getElementsByAttribute',
     value: function getElementsByAttribute(attribute, context) {
       var nodeList = (context || document).getElementsByTagName('*');
@@ -995,10 +1058,10 @@ var ModalComponent = function () {
     }
   }]);
 
-  return ModalComponent;
+  return ModalComponents;
 }();
 
-exports.default = ModalComponent;
+exports.default = ModalComponents;
 
 },{}],18:[function(require,module,exports){
 'use strict';

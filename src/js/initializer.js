@@ -8,11 +8,11 @@ export default class Initializer extends CreatePlayer {
 
     customize() {
       super.customize();
-        this.layer = this.createLayer();
-        this.controlLayer = this.createControlLayer(this.player, this.layer);
-        this.maskLayer = this.createMaskLayer();
-        this.timeLayer;
-        this.ready().metadata().then(this.videoReady.bind(this)).catch(this.videoError);
+      this.layer = this.createLayer();
+      this.controlLayer = this.createControlLayer(this.player, this.layer);
+      this.maskLayer = this.createMaskLayer();
+      this.timeLayer;
+      this.ready().metadata().then(this.videoReady.bind(this)).catch(this.videoError);
     }
 
     set controlLayer(dom) {

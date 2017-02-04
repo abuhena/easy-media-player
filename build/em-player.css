@@ -1,6 +1,6 @@
 .animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
+  -webkit-animation-duration: 500ms;
+  animation-duration: 500ms;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
@@ -43,6 +43,9 @@
 .fadeOut {
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
+}
+.em-video {
+  background-color: #000000;
 }
 .em-player {
   position: absolute;
@@ -90,6 +93,7 @@
   font-size: 12px;
   color: #fff;
   position: absolute;
+  margin-top: 12px;
 }
 .em-player .control-layer .button-layer {
   height: 50px;
@@ -146,14 +150,6 @@
 .em-player .control-layer .button-layer .em-sqeez-area .em-button.btnActive {
   background: rgba(178, 179, 178, 0.7);
 }
-.em-player .em-modal {
-  position: absolute;
-  background-color: #2b2b2b;
-  border: 1px solid #767676;
-}
-.em-player .em-modal.em-title {
-  padding: 4px;
-}
 .hide-me {
   display: none !important;
 }
@@ -164,4 +160,16 @@
   .after-invisible {
     visibility: hidden !important;
   }
+}
+.em-modal {
+  position: absolute;
+  z-index: 500;
+  background-color: #2b2b2b;
+  border: 1px solid #767676;
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+}
+.em-modal.em-title {
+  padding: 5px;
+  font-size: 12px;
+  color: #fff;
 }

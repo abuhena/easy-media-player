@@ -1,4 +1,6 @@
-
+.em-video {
+    background-color: @black;
+}
 .em-player {
     position: absolute;
     top: 0;
@@ -42,6 +44,7 @@
             font-size: 12px;
             color: @white;
             position: absolute;
+            margin-top: 12px;
             }
         }
         .button-layer {
@@ -100,14 +103,6 @@
           }
         }
     }
-    .em-modal {
-        position: absolute;
-        background-color: @modalBG;
-        border: 1px solid @modalBorder;
-        &.em-title {
-            padding: 4px;
-        }
-    }
 }
 .hide-me {
   display: none !important;
@@ -121,3 +116,15 @@
     visibility: hidden !important;
   }
 }
+.em-modal {
+        position: absolute;
+        z-index: 500;
+        background-color: @modalBG;
+        border: 1px solid @modalBorder;
+        font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+        &.em-title {
+            padding: 5px;
+            font-size: 12px;
+            color: #fff;
+        }
+    }

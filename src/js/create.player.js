@@ -1,4 +1,5 @@
 import CustomControls from './custom.controls';
+import ModalComponents from './modal.components';
 
 export default class CreatePlayer extends CustomControls {
   constructor() {
@@ -14,6 +15,7 @@ export default class CreatePlayer extends CustomControls {
     const currentParent = this.player.parentNode;
     const removedPosition = CreatePlayer.removeFrom(currentParent, this.player);
     const elem = document.createElement('video');
+    elem.classList.add('em-video');
     elem.setAttribute('src', this.videoURL);
     elem.style.width = `${dimen[0]}px`;
     elem.style.height = `${dimen[1]}px`;
@@ -47,6 +49,7 @@ export default class CreatePlayer extends CustomControls {
         el.style.top = `${this.player.offsetTop}px`;
         el.addEventListener('click', this.onLayerClick.bind(this));
         this.player.parentNode.insertBefore(el, this.player.nextSibling);
+        this.modalInstance = ModalComponents.getInstance(el);
         return el;
     }
 
