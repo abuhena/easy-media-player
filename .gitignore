@@ -2,7 +2,6 @@ node_modules/
 .idea/
 assets/
 components/
-build/
 .DS_Store
 npm-debug.log
 npm-debug.log.*
