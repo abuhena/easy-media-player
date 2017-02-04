@@ -54,7 +54,7 @@ module.exports = grunt => {
     uglify: {
       dist: {
         files: {
-          './build/em-player.min.js': ['./em-player.js', './components/DateJS/build/production/date.min.js',
+          './build/em-player.min.js': ['./em-player.js',
           './components/m-range-slider/mr.slider.min.js']
         }
       }
