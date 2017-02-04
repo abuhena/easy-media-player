@@ -157,3 +157,11 @@
 .hide-me {
   display: none !important;
 }
+@media only screen and (max-width: 480px) {
+  .after-hide {
+    display: none !important;
+  }
+  .after-invisible {
+    visibility: hidden !important;
+  }
+}

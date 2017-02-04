@@ -15,6 +15,7 @@ exports.default = function (context) {
   elem.setAttribute('id', context.playButtonId);
   elem.classList.add('em-button');
   elem.classList.add('play72');
+  elem.classList.add('after-hide');
   var childElem = document.createElement('div');
   childElem.classList.add('fa');
   childElem.classList.add('fa-fast-backward');
@@ -53,6 +54,7 @@ exports.default = function (context) {
   elem.setAttribute('id', context.playButtonId);
   elem.classList.add('em-button');
   elem.classList.add('play72');
+  elem.classList.add('after-hide');
   var childElem = document.createElement('div');
   childElem.classList.add('fa');
   childElem.classList.add('fa-fast-forward');
@@ -789,6 +791,7 @@ var Initializer = function (_CreatePlayer) {
             if (this.player.getAttribute('data-title')) title = this.player.getAttribute('data-title');
             var el = document.createElement('div');
             el.classList.add('title');
+            el.classList.add('after-invisible');
             el.setAttribute('id', 'title-' + this.idPrefix);
             el.innerText = title;
             return el;

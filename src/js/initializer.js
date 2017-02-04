@@ -31,6 +31,7 @@ export default class Initializer extends CreatePlayer {
         if (this.player.getAttribute('data-title')) title = this.player.getAttribute('data-title');
         const el = document.createElement('div');
         el.classList.add('title');
+        el.classList.add('after-invisible');
         el.setAttribute('id', `title-${this.idPrefix}`);
         el.innerText = title;
         return el;

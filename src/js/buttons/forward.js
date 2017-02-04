@@ -5,6 +5,7 @@ export default function (context) {
       elem.setAttribute('id', context.playButtonId);
       elem.classList.add('em-button');
       elem.classList.add('play72');
+      elem.classList.add('after-hide');
       const childElem = document.createElement('div');
       childElem.classList.add('fa');
       childElem.classList.add('fa-fast-forward');
