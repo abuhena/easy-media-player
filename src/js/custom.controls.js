@@ -23,6 +23,8 @@ export default class CustomControls extends MediaEvents {
         this.layer = layer;
         const elem = document.createElement('div');
         elem.classList.add('control-layer');
+        this.controlLayerId = `${this.idPrefix}-em-player-controls`;
+        elem.setAttribute('id', this.controlLayerId);
         const padding = 30;
         elem.style.width = `${this.player.offsetWidth - padding}px`;
         elem.style.left = `${padding/2}px`;

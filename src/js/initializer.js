@@ -1,5 +1,5 @@
-import CustomControls from './custom.controls.js';
-export default class Initializer extends CustomControls {
+import CreatePlayer from './create.player';
+export default class Initializer extends CreatePlayer {
     constructor(player, index) {
         super(index);
         this.player = player;
@@ -7,12 +7,7 @@ export default class Initializer extends CustomControls {
     }
 
     customize() {
-        this.videoURL = this.player.getAttribute('src');
-        const controls = this.player.getAttribute('controls');
-        if (controls !== null) this.player.removeAttribute('controls');
-        const dimen = Initializer.screen(this.player.getAttribute('data-width'));
-        this.player.style.width = `${dimen[0]}px`;
-        this.player.style.height = `${dimen[1]}px`;
+      super.customize();
         this.layer = this.createLayer();
         this.controlLayer = this.createControlLayer(this.player, this.layer);
         this.maskLayer = this.createMaskLayer();
@@ -30,13 +25,6 @@ export default class Initializer extends CustomControls {
         this.buttonArea = this.createButtonArea(dom);
     }
 
-
-    static screen(w = 640) {
-        const ratio = 56.25;
-        w = w === null ? 640 : w;
-        return [w, ((w * ratio)/100)];
-    }
-
     addTitle() {
         let title;
         title = this.videoURL.substr(this.videoURL.lastIndexOf('/') + 1);
@@ -46,35 +34,6 @@ export default class Initializer extends CustomControls {
         el.setAttribute('id', `title-${this.idPrefix}`);
         el.innerText = title;
         return el;
-    }
-
-    createLayer() {
-        const el = document.createElement('div');
-        el.classList.add('em-player');
-        el.style.width = this.player.style.width;
-        el.style.height = this.player.style.height;
-        el.style.left = `${this.player.offsetLeft}px`;
-        el.style.top = `${this.player.offsetTop}px`;
-        el.addEventListener('click', this.onLayerClick.bind(this));
-        this.player.parentNode.insertBefore(el, this.player.nextSibling);
-        return el;
-    }
-
-    createTimeLayer(controlLayer) {
-        const parentEl = document.createElement('div');
-        parentEl.classList.add('timer-cmp');
-        const elTE = document.createElement('p');
-        elTE.classList.add('timer');
-        elTE.style.left = '0px';
-        elTE.innerText = '00:00';
-        const elTS = document.createElement('p');
-        elTS.classList.add('timer');
-        elTS.style.right = '0px';
-        elTS.innerText = '00:00';
-        parentEl.appendChild(elTE);
-        parentEl.appendChild(elTS);
-        controlLayer.appendChild(parentEl);
-        return [elTE, elTS];
     }
 
     videoReady() {

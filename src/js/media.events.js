@@ -10,24 +10,55 @@ export default class MediaEvents extends ComponentEvents {
       return {
         metadata: () => {
           return new Promise((resolve, reject) => {
+            let resolved = false;
+            context.addEventListener('loadedmetadata', event => {
+              if (!resolved) {
+                resolve(event);
+                classContext.bindMediaEvents();
+                resolved = true;
+              }
+            });
             context.addEventListener('loadeddata', event => {
-              console.log('resolved');
-              resolve(event);
-              context.addEventListener('timeupdate',
-                classContext.onTimeUpdate.bind(classContext));
-                context.addEventListener('play',
-                classContext.onPlayListener.bind(classContext));
-                context.addEventListener('playing',
-                classContext.onAfterPlayListener.bind(classContext));
-                context.addEventListener('pause',
-                classContext.onPauseListener.bind(classContext));
-              });
+              if (!resolved) {
+                resolve(event);
+                classContext.bindMediaEvents();
+                resolved = true;
+              }
+            });
+
+            context.addEventListener('load', event => {
+              alert('what an event');
+              if (!resolved) {
+                resolve(event);
+                classContext.bindMediaEvents();
+                resolved = true;
+              }
+            });
+            context.addEventListener('canplay', event => {
+              if (!resolved) {
+                resolve(event);
+                classContext.bindMediaEvents();
+                resolved = true;
+              }
+            });
               context.addEventListener('error', event => {
                 reject(event);
               });
             });
           }
         }
+    }
+
+    bindMediaEvents() {
+              alert('hola');
+      this.player.addEventListener('timeupdate',
+      this.onTimeUpdate.bind(this));
+      this.player.addEventListener('play',
+      this.onPlayListener.bind(this));
+      this.player.addEventListener('playing',
+      this.onAfterPlayListener.bind(this));
+      this.player.addEventListener('pause',
+      this.onPauseListener.bind(this));
     }
 
     onTimeUpdate() {

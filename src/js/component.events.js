@@ -59,6 +59,22 @@ export class ComponentEvents {
       }
       }
     }
+    windowResizeHandler() {
+      const wrapper = this.player.parentNode;
+      const dimen = ComponentEvents.screen(wrapper.clienWidth);
+      this.player.style.width = `${dimen[0]}px`;
+      this.player.style.height = `${dimen[1]}px`;
+      this.layer.style.width = `${dimen[0]}px`;
+      this.layer.style.height = `${dimen[1]}px`;
+      document.getElementById(this.controlLayerId).style.width = `${dimen[0] - 30}px`;
+    }
+
+    static screen(w = 640) {
+      const ratio = 56.25;
+      w = w === null ? 640 : w;
+      w = w > window.innerWidth ? window.innerWidth : w;
+      return [w, ((w * ratio)/100)];
+  }
 
     hideComponent(target) {
       target.classList.add('hide-me');

@@ -398,6 +398,17 @@ var ComponentEvents = exports.ComponentEvents = function () {
       }
     }
   }, {
+    key: 'windowResizeHandler',
+    value: function windowResizeHandler() {
+      var wrapper = this.player.parentNode;
+      var dimen = ComponentEvents.screen(wrapper.clienWidth);
+      this.player.style.width = dimen[0] + 'px';
+      this.player.style.height = dimen[1] + 'px';
+      this.layer.style.width = dimen[0] + 'px';
+      this.layer.style.height = dimen[1] + 'px';
+      document.getElementById(this.controlLayerId).style.width = dimen[0] - 30 + 'px';
+    }
+  }, {
     key: 'hideComponent',
     value: function hideComponent(target) {
       target.classList.add('hide-me');
@@ -407,12 +418,127 @@ var ComponentEvents = exports.ComponentEvents = function () {
     value: function showComponent(target) {
       if (target.classList.contains('hide-me')) target.classList.remove('hide-me');
     }
+  }], [{
+    key: 'screen',
+    value: function screen() {
+      var w = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 640;
+
+      var ratio = 56.25;
+      w = w === null ? 640 : w;
+      w = w > window.innerWidth ? window.innerWidth : w;
+      return [w, w * ratio / 100];
+    }
   }]);
 
   return ComponentEvents;
 }();
 
 },{}],11:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _custom = require('./custom.controls');
+
+var _custom2 = _interopRequireDefault(_custom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CreatePlayer = function (_CustomControls) {
+  _inherits(CreatePlayer, _CustomControls);
+
+  function CreatePlayer() {
+    _classCallCheck(this, CreatePlayer);
+
+    var _this = _possibleConstructorReturn(this, (CreatePlayer.__proto__ || Object.getPrototypeOf(CreatePlayer)).call(this));
+
+    window.addEventListener('resize', _this.windowResizeHandler.bind(_this));
+    return _this;
+  }
+
+  _createClass(CreatePlayer, [{
+    key: 'customize',
+    value: function customize() {
+      this.videoURL = this.player.getAttribute('src');
+      var preload = this.player.getAttribute('preload') !== null;
+      var autoload = this.player.getAttribute('autoload') !== null;
+      var dimen = CreatePlayer.screen(this.player.getAttribute('data-width'));
+      var currentParent = this.player.parentNode;
+      var removedPosition = CreatePlayer.removeFrom(currentParent, this.player);
+      var elem = document.createElement('video');
+      elem.setAttribute('src', this.videoURL);
+      elem.style.width = dimen[0] + 'px';
+      elem.style.height = dimen[1] + 'px';
+      if (autoload) elem.setAttribute('autoload', '');
+      if (preload) elem.setAttribute('preload', '');
+      this.player = elem;
+      var wrapper = document.createElement('div');
+      wrapper.appendChild(this.player);
+      if (removedPosition) {
+        currentParent.insertBefore(wrapper, removedPosition);
+      } else {
+        currentParent.appendChild(wrapper);
+      }
+    }
+  }, {
+    key: 'createLayer',
+    value: function createLayer() {
+      var el = document.createElement('div');
+      el.classList.add('em-player');
+      el.style.width = this.player.style.width;
+      el.style.height = this.player.style.height;
+      el.style.left = this.player.offsetLeft + 'px';
+      el.style.top = this.player.offsetTop + 'px';
+      el.addEventListener('click', this.onLayerClick.bind(this));
+      this.player.parentNode.insertBefore(el, this.player.nextSibling);
+      return el;
+    }
+  }, {
+    key: 'createTimeLayer',
+    value: function createTimeLayer(controlLayer) {
+      var parentEl = document.createElement('div');
+      parentEl.classList.add('timer-cmp');
+      var elTE = document.createElement('p');
+      elTE.classList.add('timer');
+      elTE.style.left = '0px';
+      elTE.innerText = '00:00';
+      var elTS = document.createElement('p');
+      elTS.classList.add('timer');
+      elTS.style.right = '0px';
+      elTS.innerText = '00:00';
+      parentEl.appendChild(elTE);
+      parentEl.appendChild(elTS);
+      controlLayer.appendChild(parentEl);
+      return [elTE, elTS];
+    }
+  }], [{
+    key: 'removeFrom',
+    value: function removeFrom(parent, child) {
+      for (var i = 0; parent.children.length > i; i++) {
+        if (parent.children[i] === child) {
+          parent.removeChild(child);
+          return parent.children[i];
+        }
+      }
+    }
+  }]);
+
+  return CreatePlayer;
+}(_custom2.default);
+
+exports.default = CreatePlayer;
+
+},{"./custom.controls":12}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -492,6 +618,8 @@ var CustomControls = function (_MediaEvents) {
             this.layer = layer;
             var elem = document.createElement('div');
             elem.classList.add('control-layer');
+            this.controlLayerId = this.idPrefix + '-em-player-controls';
+            elem.setAttribute('id', this.controlLayerId);
             var padding = 30;
             elem.style.width = this.player.offsetWidth - padding + 'px';
             elem.style.left = padding / 2 + 'px';
@@ -585,7 +713,7 @@ var CustomControls = function (_MediaEvents) {
 
 exports.default = CustomControls;
 
-},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/pause.js":6,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./media.events.js":15,"./timer.js":17}],12:[function(require,module,exports){
+},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/pause.js":6,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./media.events.js":16,"./timer.js":18}],13:[function(require,module,exports){
 'use strict';
 
 var _initializer = require('./initializer.js');
@@ -607,7 +735,7 @@ window.onload = function () {
     })();
 };
 
-},{"./initializer.js":13}],13:[function(require,module,exports){
+},{"./initializer.js":14}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -616,9 +744,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _customControls = require('./custom.controls.js');
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _customControls2 = _interopRequireDefault(_customControls);
+var _create = require('./create.player');
+
+var _create2 = _interopRequireDefault(_create);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -628,8 +758,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Initializer = function (_CustomControls) {
-    _inherits(Initializer, _CustomControls);
+var Initializer = function (_CreatePlayer) {
+    _inherits(Initializer, _CreatePlayer);
 
     function Initializer(player, index) {
         _classCallCheck(this, Initializer);
@@ -644,12 +774,7 @@ var Initializer = function (_CustomControls) {
     _createClass(Initializer, [{
         key: 'customize',
         value: function customize() {
-            this.videoURL = this.player.getAttribute('src');
-            var controls = this.player.getAttribute('controls');
-            if (controls !== null) this.player.removeAttribute('controls');
-            var dimen = Initializer.screen(this.player.getAttribute('data-width'));
-            this.player.style.width = dimen[0] + 'px';
-            this.player.style.height = dimen[1] + 'px';
+            _get(Initializer.prototype.__proto__ || Object.getPrototypeOf(Initializer.prototype), 'customize', this).call(this);
             this.layer = this.createLayer();
             this.controlLayer = this.createControlLayer(this.player, this.layer);
             this.maskLayer = this.createMaskLayer();
@@ -667,37 +792,6 @@ var Initializer = function (_CustomControls) {
             el.setAttribute('id', 'title-' + this.idPrefix);
             el.innerText = title;
             return el;
-        }
-    }, {
-        key: 'createLayer',
-        value: function createLayer() {
-            var el = document.createElement('div');
-            el.classList.add('em-player');
-            el.style.width = this.player.style.width;
-            el.style.height = this.player.style.height;
-            el.style.left = this.player.offsetLeft + 'px';
-            el.style.top = this.player.offsetTop + 'px';
-            el.addEventListener('click', this.onLayerClick.bind(this));
-            this.player.parentNode.insertBefore(el, this.player.nextSibling);
-            return el;
-        }
-    }, {
-        key: 'createTimeLayer',
-        value: function createTimeLayer(controlLayer) {
-            var parentEl = document.createElement('div');
-            parentEl.classList.add('timer-cmp');
-            var elTE = document.createElement('p');
-            elTE.classList.add('timer');
-            elTE.style.left = '0px';
-            elTE.innerText = '00:00';
-            var elTS = document.createElement('p');
-            elTS.classList.add('timer');
-            elTS.style.right = '0px';
-            elTS.innerText = '00:00';
-            parentEl.appendChild(elTE);
-            parentEl.appendChild(elTS);
-            controlLayer.appendChild(parentEl);
-            return [elTE, elTS];
         }
     }, {
         key: 'videoReady',
@@ -720,26 +814,17 @@ var Initializer = function (_CustomControls) {
             this.timeLayer = this.createTimeLayer(dom);
             this.buttonArea = this.createButtonArea(dom);
         }
-    }], [{
-        key: 'screen',
-        value: function screen() {
-            var w = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 640;
-
-            var ratio = 56.25;
-            w = w === null ? 640 : w;
-            return [w, w * ratio / 100];
-        }
     }]);
 
     return Initializer;
-}(_customControls2.default);
+}(_create2.default);
 
 exports.default = Initializer;
 
-},{"./custom.controls.js":11}],14:[function(require,module,exports){
+},{"./create.player":11}],15:[function(require,module,exports){
 "use strict";
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -773,13 +858,36 @@ var MediaEvents = function (_ComponentEvents) {
       return {
         metadata: function metadata() {
           return new Promise(function (resolve, reject) {
+            var resolved = false;
+            context.addEventListener('loadedmetadata', function (event) {
+              if (!resolved) {
+                resolve(event);
+                classContext.bindMediaEvents();
+                resolved = true;
+              }
+            });
             context.addEventListener('loadeddata', function (event) {
-              console.log('resolved');
-              resolve(event);
-              context.addEventListener('timeupdate', classContext.onTimeUpdate.bind(classContext));
-              context.addEventListener('play', classContext.onPlayListener.bind(classContext));
-              context.addEventListener('playing', classContext.onAfterPlayListener.bind(classContext));
-              context.addEventListener('pause', classContext.onPauseListener.bind(classContext));
+              if (!resolved) {
+                resolve(event);
+                classContext.bindMediaEvents();
+                resolved = true;
+              }
+            });
+
+            context.addEventListener('load', function (event) {
+              alert('what an event');
+              if (!resolved) {
+                resolve(event);
+                classContext.bindMediaEvents();
+                resolved = true;
+              }
+            });
+            context.addEventListener('canplay', function (event) {
+              if (!resolved) {
+                resolve(event);
+                classContext.bindMediaEvents();
+                resolved = true;
+              }
             });
             context.addEventListener('error', function (event) {
               reject(event);
@@ -787,6 +895,15 @@ var MediaEvents = function (_ComponentEvents) {
           });
         }
       };
+    }
+  }, {
+    key: 'bindMediaEvents',
+    value: function bindMediaEvents() {
+      alert('hola');
+      this.player.addEventListener('timeupdate', this.onTimeUpdate.bind(this));
+      this.player.addEventListener('play', this.onPlayListener.bind(this));
+      this.player.addEventListener('playing', this.onAfterPlayListener.bind(this));
+      this.player.addEventListener('pause', this.onPauseListener.bind(this));
     }
   }, {
     key: 'onTimeUpdate',
@@ -820,7 +937,7 @@ var MediaEvents = function (_ComponentEvents) {
 
 exports.default = MediaEvents;
 
-},{"./component.events.js":10}],16:[function(require,module,exports){
+},{"./component.events.js":10}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -880,7 +997,7 @@ var ModalComponent = function () {
 
 exports.default = ModalComponent;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -923,4 +1040,4 @@ function getTimer(mil) {
     return str;
 }
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]);
