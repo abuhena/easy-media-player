@@ -3,6 +3,7 @@ export default function (context) {
       elem.classList.add('em-button');
       context.fullscreenButtonId = `${context.idPrefix}-fullscreen-button`;
       elem.setAttribute('id', context.playButtonId);
+      elem.setAttribute('data-em-cmp-title', 'Toggle fullscreen');
       elem.classList.add('em-button');
       elem.classList.add('fullscreen72');
       const childElem = document.createElement('div');

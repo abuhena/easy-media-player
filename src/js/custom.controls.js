@@ -63,14 +63,18 @@ export default class CustomControls extends MediaEvents {
       const elem = document.createElement('div');
       elem.classList.add('em-sqeez-area');
       elem.classList.add('middle-button-area');
-      elem.appendChild(fastBackwardBtn(this));
+      const fbButtonCmp = fastBackwardBtn(this);
+      elem.appendChild(fbButtonCmp);
+      fbButtonCmp.addEventListener('click', this.onfastBackwardButtonClickListener.bind(this));
       const playButtonCmp = playBtn(this);
       playButtonCmp.addEventListener('click', this.onPlayButtonClickListener.bind(this));
       elem.appendChild(playButtonCmp);
       const pauseButtonCmp = pauseBtn(this);
       pauseButtonCmp.addEventListener('click', this.onPauseButtonClickListener.bind(this));
       elem.appendChild(pauseButtonCmp);
-      elem.appendChild(fastForwardBtn(this));
+      const ffButtonCmp = fastForwardBtn(this);
+      ffButtonCmp.addEventListener('click', this.onfastForwardButtonClickListener.bind(this));
+      elem.appendChild(ffButtonCmp);
       //elem.appendChild(subtitleBtn(this));
       parentEl.appendChild(elem);
     }

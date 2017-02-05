@@ -3,6 +3,7 @@ export default function (context) {
       elem.classList.add('em-button');
       context.ffButtonId = `${context.idPrefix}-fb-button`;
       elem.setAttribute('id', context.playButtonId);
+      elem.setAttribute('data-em-cmp-title', 'Skip backward');
       elem.classList.add('em-button');
       elem.classList.add('play72');
       elem.classList.add('after-hide');

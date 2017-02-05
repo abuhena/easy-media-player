@@ -1,3 +1,4 @@
+import getTimer from './timer.js';
 export class ComponentEvents {
     addSliderListeners() {
         this.slider.on('mouseover', this.onSliderMouseover.bind(this));
@@ -9,9 +10,16 @@ export class ComponentEvents {
         this.slider.on('change', this.onSliderChange.bind(this));
     }
 
-    onSliderMouseover(value) {
+    onSliderMouseover(value, event) {
     }
-    onSliderMousemove(value) {
+    onSliderMousemove(value, event) {
+      if (!this.seekHint) {
+        this.seekHint = this.modalInstance.createTitleBox(getTimer(value.fill * 1000),
+        {x: event.pageX, y: event.pageY}, this.seekHint);
+      } else {
+        this.modalInstance.updateTitleBox(getTimer(value.fill * 1000),
+        {x: event.pageX, y: event.pageY});
+      }
     }
     onSliderMousedown() {
       this.sliderMouseDown = true;
@@ -20,6 +28,9 @@ export class ComponentEvents {
       this.sliderMouseDown = false;
     }
     onSliderMouseout() {
+      console.log('mouseout');
+      this.modalInstance.removeTitle();
+      this.seekHint = undefined;
     }
     onSliderSeek() {
       this.elapsed = this.slider.getValue();
@@ -48,6 +59,28 @@ export class ComponentEvents {
         this.hideComponent(document.getElementById(this.pauseButtonId));
         this.showComponent(document.getElementById(this.playButtonId));
       }
+    }
+
+    onfastForwardButtonClickListener() {
+      let toFastForward = this.player.currentTime + 5;
+      if (this.player.duration < 60) toFastForward = this.player.currentTime + 3;
+      if (this.player.duration > (60 * 20)) toFastForward = this.player.currentTime + 8;
+      if (this.player.duration > 3600) toFastForward = this.player.currentTime + 10;
+      if (this.player.duration < toFastForward) toFastForward = this.player.duration - 1;
+      this.elapsed = toFastForward;
+      this.duration = this.player.duration - toFastForward;
+      this.player.currentTime = toFastForward;
+    }
+
+    onfastBackwardButtonClickListener() {
+      let toFastBackward = this.player.currentTime - 5;
+      if (this.player.duration < 60) toFastBackward = this.player.currentTime - 3;
+      if (this.player.duration > (60 * 20)) toFastBackward = this.player.currentTime - 8;
+      if (this.player.duration > 3600) toFastBackward = this.player.currentTime - 10;
+      if (0 > toFastBackward) toFastBackward = 0;
+      this.elapsed = toFastBackward;
+      this.duration = this.player.duration - toFastBackward;
+      this.player.currentTime = toFastBackward;
     }
 
     onLayerClick(event) {

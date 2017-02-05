@@ -13,6 +13,7 @@ exports.default = function (context) {
   elem.classList.add('em-button');
   context.ffButtonId = context.idPrefix + '-fb-button';
   elem.setAttribute('id', context.playButtonId);
+  elem.setAttribute('data-em-cmp-title', 'Skip backward');
   elem.classList.add('em-button');
   elem.classList.add('play72');
   elem.classList.add('after-hide');
@@ -52,6 +53,7 @@ exports.default = function (context) {
   elem.classList.add('em-button');
   context.fbButtonId = context.idPrefix + '-ff-button';
   elem.setAttribute('id', context.playButtonId);
+  elem.setAttribute('data-em-cmp-title', 'Skip forward');
   elem.classList.add('em-button');
   elem.classList.add('play72');
   elem.classList.add('after-hide');
@@ -91,6 +93,7 @@ exports.default = function (context) {
   elem.classList.add('em-button');
   context.fullscreenButtonId = context.idPrefix + '-fullscreen-button';
   elem.setAttribute('id', context.playButtonId);
+  elem.setAttribute('data-em-cmp-title', 'Toggle fullscreen');
   elem.classList.add('em-button');
   elem.classList.add('fullscreen72');
   var childElem = document.createElement('div');
@@ -129,6 +132,7 @@ exports.default = function (context) {
   elem.classList.add('em-button');
   context.menuButtonId = context.idPrefix + '-menu-button';
   elem.setAttribute('id', context.playButtonId);
+  elem.setAttribute('data-em-cmp-title', 'More options');
   elem.classList.add('em-button');
   elem.classList.add('menu72');
   var childElem = document.createElement('div');
@@ -167,6 +171,7 @@ exports.default = function (context) {
   elem.classList.add('em-button');
   context.pauseButtonId = context.idPrefix + '-pause-button';
   elem.setAttribute('id', context.pauseButtonId);
+  elem.setAttribute('data-em-cmp-title', 'Pause');
   elem.classList.add('hide-me');
   elem.classList.add('em-button');
   elem.classList.add('play72');
@@ -245,6 +250,7 @@ exports.default = function (context) {
   elem.classList.add('em-button');
   context.subtitleButtonId = context.idPrefix + '-subtitle-button';
   elem.setAttribute('id', context.playButtonId);
+  elem.setAttribute('data-em-cmp-title', 'Show menu for subtitle');
   elem.classList.add('em-button');
   elem.classList.add('subtitle72');
   var childElem = document.createElement('div');
@@ -316,8 +322,15 @@ exports.default = function (context) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.ComponentEvents = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _timer = require('./timer.js');
+
+var _timer2 = _interopRequireDefault(_timer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -339,10 +352,16 @@ var ComponentEvents = exports.ComponentEvents = function () {
     }
   }, {
     key: 'onSliderMouseover',
-    value: function onSliderMouseover(value) {}
+    value: function onSliderMouseover(value, event) {}
   }, {
     key: 'onSliderMousemove',
-    value: function onSliderMousemove(value) {}
+    value: function onSliderMousemove(value, event) {
+      if (!this.seekHint) {
+        this.seekHint = this.modalInstance.createTitleBox((0, _timer2.default)(value.fill * 1000), { x: event.pageX, y: event.pageY }, this.seekHint);
+      } else {
+        this.modalInstance.updateTitleBox((0, _timer2.default)(value.fill * 1000), { x: event.pageX, y: event.pageY });
+      }
+    }
   }, {
     key: 'onSliderMousedown',
     value: function onSliderMousedown() {
@@ -355,7 +374,11 @@ var ComponentEvents = exports.ComponentEvents = function () {
     }
   }, {
     key: 'onSliderMouseout',
-    value: function onSliderMouseout() {}
+    value: function onSliderMouseout() {
+      console.log('mouseout');
+      this.modalInstance.removeTitle();
+      this.seekHint = undefined;
+    }
   }, {
     key: 'onSliderSeek',
     value: function onSliderSeek() {
@@ -389,6 +412,30 @@ var ComponentEvents = exports.ComponentEvents = function () {
         this.hideComponent(document.getElementById(this.pauseButtonId));
         this.showComponent(document.getElementById(this.playButtonId));
       }
+    }
+  }, {
+    key: 'onfastForwardButtonClickListener',
+    value: function onfastForwardButtonClickListener() {
+      var toFastForward = this.player.currentTime + 5;
+      if (this.player.duration < 60) toFastForward = this.player.currentTime + 3;
+      if (this.player.duration > 60 * 20) toFastForward = this.player.currentTime + 8;
+      if (this.player.duration > 3600) toFastForward = this.player.currentTime + 10;
+      if (this.player.duration < toFastForward) toFastForward = this.player.duration - 1;
+      this.elapsed = toFastForward;
+      this.duration = this.player.duration - toFastForward;
+      this.player.currentTime = toFastForward;
+    }
+  }, {
+    key: 'onfastBackwardButtonClickListener',
+    value: function onfastBackwardButtonClickListener() {
+      var toFastBackward = this.player.currentTime - 5;
+      if (this.player.duration < 60) toFastBackward = this.player.currentTime - 3;
+      if (this.player.duration > 60 * 20) toFastBackward = this.player.currentTime - 8;
+      if (this.player.duration > 3600) toFastBackward = this.player.currentTime - 10;
+      if (0 > toFastBackward) toFastBackward = 0;
+      this.elapsed = toFastBackward;
+      this.duration = this.player.duration - toFastBackward;
+      this.player.currentTime = toFastBackward;
     }
   }, {
     key: 'onLayerClick',
@@ -437,7 +484,7 @@ var ComponentEvents = exports.ComponentEvents = function () {
   return ComponentEvents;
 }();
 
-},{}],11:[function(require,module,exports){
+},{"./timer.js":18}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -672,14 +719,18 @@ var CustomControls = function (_MediaEvents) {
             var elem = document.createElement('div');
             elem.classList.add('em-sqeez-area');
             elem.classList.add('middle-button-area');
-            elem.appendChild((0, _backward2.default)(this));
+            var fbButtonCmp = (0, _backward2.default)(this);
+            elem.appendChild(fbButtonCmp);
+            fbButtonCmp.addEventListener('click', this.onfastBackwardButtonClickListener.bind(this));
             var playButtonCmp = (0, _play2.default)(this);
             playButtonCmp.addEventListener('click', this.onPlayButtonClickListener.bind(this));
             elem.appendChild(playButtonCmp);
             var pauseButtonCmp = (0, _pause2.default)(this);
             pauseButtonCmp.addEventListener('click', this.onPauseButtonClickListener.bind(this));
             elem.appendChild(pauseButtonCmp);
-            elem.appendChild((0, _forward2.default)(this));
+            var ffButtonCmp = (0, _forward2.default)(this);
+            ffButtonCmp.addEventListener('click', this.onfastForwardButtonClickListener.bind(this));
+            elem.appendChild(ffButtonCmp);
             //elem.appendChild(subtitleBtn(this));
             parentEl.appendChild(elem);
         }
@@ -953,7 +1004,6 @@ var ModalComponents = function () {
 
     if (enforcer !== singletonEnforcer) throw new Error('Cannot construct singleton');
     this.titleAttribute = 'data-em-cmp-title';
-    this.areaNode = areaNode;
     var observer = new MutationObserver(function (type) {
       _this.addToEvent(areaNode);
     });
@@ -982,6 +1032,7 @@ var ModalComponents = function () {
     value: function bindTitle(event) {
       var _this3 = this;
 
+      clearTimeout(this.timeoutInstance);
       this.timeoutInstance = setTimeout(function () {
         _this3.createTitleBox(_this3.getText(event.target), { x: event.pageX, y: event.pageY });
         setTimeout(function () {
@@ -992,10 +1043,11 @@ var ModalComponents = function () {
   }, {
     key: 'removeTitle',
     value: function removeTitle() {
-      clearTimeout(this.timeoutInstance);
       var el = document.getElementById('data-em-title-component');
       if (el && el.parentNode) {
         el.parentNode.removeChild(el);
+      } else {
+        clearTimeout(this.timeoutInstance);
       }
     }
   }, {
@@ -1016,6 +1068,17 @@ var ModalComponents = function () {
         return elem;
       }
       return null;
+    }
+  }, {
+    key: 'updateTitleBox',
+    value: function updateTitleBox(text, position) {
+      var elem = document.getElementById('data-em-title-component');
+      if (elem) {
+        elem.innerText = text;
+        elem.style.top = position.y - 50 + 'px';
+        elem.style.left = position.x - elem.clientWidth / 2 + 'px';
+        return elem;
+      }
     }
 
     /**

@@ -3,6 +3,7 @@ export default function (context) {
       elem.classList.add('em-button');
       context.menuButtonId = `${context.idPrefix}-menu-button`;
       elem.setAttribute('id', context.playButtonId);
+      elem.setAttribute('data-em-cmp-title', 'More options');
       elem.classList.add('em-button');
       elem.classList.add('menu72');
       const childElem = document.createElement('div');

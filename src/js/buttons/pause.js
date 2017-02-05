@@ -3,6 +3,7 @@ export default function (context) {
       elem.classList.add('em-button');
       context.pauseButtonId = `${context.idPrefix}-pause-button`;
       elem.setAttribute('id', context.pauseButtonId);
+      elem.setAttribute('data-em-cmp-title', 'Pause');
       elem.classList.add('hide-me');
       elem.classList.add('em-button');
       elem.classList.add('play72');

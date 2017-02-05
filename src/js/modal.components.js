@@ -5,7 +5,6 @@ export default class ModalComponents {
   constructor(enforcer, areaNode) {
     if (enforcer !== singletonEnforcer) throw new Error('Cannot construct singleton');
     this.titleAttribute = 'data-em-cmp-title';
-    this.areaNode = areaNode;
     const observer = new MutationObserver(type => {
       this.addToEvent(areaNode);
     });
@@ -32,6 +31,7 @@ export default class ModalComponents {
    * @param parentContext
    */
   bindTitle(event) {
+    clearTimeout(this.timeoutInstance);
     this.timeoutInstance = setTimeout(() => {
       this.createTitleBox(this.getText(event.target),
       {x: event.pageX, y: event.pageY});
@@ -42,10 +42,11 @@ export default class ModalComponents {
   }
 
   removeTitle() {
-    clearTimeout(this.timeoutInstance);
     const el = document.getElementById('data-em-title-component');
     if (el && el.parentNode) {
       el.parentNode.removeChild(el);
+    } else {
+      clearTimeout(this.timeoutInstance);
     }
   }
 
@@ -65,6 +66,16 @@ export default class ModalComponents {
       return elem;
     }
     return null;
+  }
+
+  updateTitleBox(text, position) {
+    const elem = document.getElementById('data-em-title-component');
+    if(elem) {
+      elem.innerText = text;
+      elem.style.top = `${position.y - 50}px`;
+      elem.style.left = `${position.x - (elem.clientWidth/2)}px`;
+      return elem;
+    }
   }
 
   /**
