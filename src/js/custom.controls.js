@@ -83,7 +83,9 @@ export default class CustomControls extends MediaEvents {
       const elem = document.createElement('div');
       elem.classList.add('em-sqeez-area');
       elem.classList.add('right-button-area');
-      elem.appendChild(fullscreenBtn(this));
+      const fsButton = fullscreenBtn(this);
+      fsButton.addEventListener('click', this.onFullscreenButtonClickListener.bind(this));
+      elem.appendChild(fsButton);
       elem.appendChild(menuBtn(this));
       parentEl.appendChild(elem);
     }

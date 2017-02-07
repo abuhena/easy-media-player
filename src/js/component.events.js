@@ -1,4 +1,5 @@
 import getTimer from './timer.js';
+import FullscreenAPI from './fullscreen.api';
 export class ComponentEvents {
     addSliderListeners() {
         this.slider.on('mouseover', this.onSliderMouseover.bind(this));
@@ -23,12 +24,12 @@ export class ComponentEvents {
     }
     onSliderMousedown() {
       this.sliderMouseDown = true;
+      this.onSliderMouseout();
     }
     onSliderMouseup(value) {
       this.sliderMouseDown = false;
     }
     onSliderMouseout() {
-      console.log('mouseout');
       this.modalInstance.removeTitle();
       this.seekHint = undefined;
     }
@@ -81,6 +82,12 @@ export class ComponentEvents {
       this.elapsed = toFastBackward;
       this.duration = this.player.duration - toFastBackward;
       this.player.currentTime = toFastBackward;
+    }
+
+    onFullscreenButtonClickListener() {
+      if (FullscreenAPI.requestFullscreen) {
+        this.player[FullscreenAPI.requestFullscreen]();
+      }
     }
 
     onLayerClick(event) {

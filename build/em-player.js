@@ -330,6 +330,10 @@ var _timer = require('./timer.js');
 
 var _timer2 = _interopRequireDefault(_timer);
 
+var _fullscreen = require('./fullscreen.api');
+
+var _fullscreen2 = _interopRequireDefault(_fullscreen);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -366,6 +370,7 @@ var ComponentEvents = exports.ComponentEvents = function () {
     key: 'onSliderMousedown',
     value: function onSliderMousedown() {
       this.sliderMouseDown = true;
+      this.onSliderMouseout();
     }
   }, {
     key: 'onSliderMouseup',
@@ -375,7 +380,6 @@ var ComponentEvents = exports.ComponentEvents = function () {
   }, {
     key: 'onSliderMouseout',
     value: function onSliderMouseout() {
-      console.log('mouseout');
       this.modalInstance.removeTitle();
       this.seekHint = undefined;
     }
@@ -438,6 +442,13 @@ var ComponentEvents = exports.ComponentEvents = function () {
       this.player.currentTime = toFastBackward;
     }
   }, {
+    key: 'onFullscreenButtonClickListener',
+    value: function onFullscreenButtonClickListener() {
+      if (_fullscreen2.default.requestFullscreen) {
+        this.player[_fullscreen2.default.requestFullscreen]();
+      }
+    }
+  }, {
     key: 'onLayerClick',
     value: function onLayerClick(event) {
       if (event.target === this.layer) {
@@ -484,7 +495,7 @@ var ComponentEvents = exports.ComponentEvents = function () {
   return ComponentEvents;
 }();
 
-},{"./timer.js":18}],11:[function(require,module,exports){
+},{"./fullscreen.api":14,"./timer.js":20}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -595,7 +606,7 @@ var CreatePlayer = function (_CustomControls) {
 
 exports.default = CreatePlayer;
 
-},{"./custom.controls":12,"./modal.components":17}],12:[function(require,module,exports){
+},{"./custom.controls":12,"./modal.components":18}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -740,7 +751,9 @@ var CustomControls = function (_MediaEvents) {
             var elem = document.createElement('div');
             elem.classList.add('em-sqeez-area');
             elem.classList.add('right-button-area');
-            elem.appendChild((0, _fullscreen2.default)(this));
+            var fsButton = (0, _fullscreen2.default)(this);
+            fsButton.addEventListener('click', this.onFullscreenButtonClickListener.bind(this));
+            elem.appendChild(fsButton);
             elem.appendChild((0, _menu2.default)(this));
             parentEl.appendChild(elem);
         }
@@ -774,29 +787,47 @@ var CustomControls = function (_MediaEvents) {
 
 exports.default = CustomControls;
 
-},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/pause.js":6,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./media.events.js":16,"./timer.js":18}],13:[function(require,module,exports){
+},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/pause.js":6,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./media.events.js":17,"./timer.js":20}],13:[function(require,module,exports){
+"use strict";
+
+},{}],14:[function(require,module,exports){
 'use strict';
 
-var _initializer = require('./initializer.js');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var FullscreenApi = {};
 
-var _initializer2 = _interopRequireDefault(_initializer);
+// browser API methods
+var apiMap = [['requestFullscreen', 'exitFullscreen', 'fullscreenElement', 'fullscreenEnabled', 'fullscreenchange', 'fullscreenerror'],
+// WebKit
+['webkitRequestFullscreen', 'webkitExitFullscreen', 'webkitFullscreenElement', 'webkitFullscreenEnabled', 'webkitfullscreenchange', 'webkitfullscreenerror'],
+// Old WebKit (Safari 5.1)
+['webkitRequestFullScreen', 'webkitCancelFullScreen', 'webkitCurrentFullScreenElement', 'webkitCancelFullScreen', 'webkitfullscreenchange', 'webkitfullscreenerror'],
+// Mozilla
+['mozRequestFullScreen', 'mozCancelFullScreen', 'mozFullScreenElement', 'mozFullScreenEnabled', 'mozfullscreenchange', 'mozfullscreenerror'],
+// Microsoft
+['msRequestFullscreen', 'msExitFullscreen', 'msFullscreenElement', 'msFullscreenEnabled', 'MSFullscreenChange', 'MSFullscreenError']];
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var specApi = apiMap[0];
+var browserApi = void 0;
 
-window.onload = function () {
-    (function () {
-        var attr = 'data-em-player';
-        var getAllPlayer = document.getElementsByTagName('video');
-        getAllPlayer = Array.prototype.slice.call(getAllPlayer);
-        getAllPlayer.forEach(function (each, index) {
-            if (each.getAttribute(attr) !== null || each.getAttribute(attr) !== undefined) {
-                return new _initializer2.default(each, index);
-            }
-        });
-    })();
-};
+for (var i = 0; i < apiMap.length; i++) {
+  if (apiMap[i][1] in document) {
+    browserApi = apiMap[i];
+    break;
+  }
+}
 
-},{"./initializer.js":14}],14:[function(require,module,exports){
+if (browserApi) {
+  for (var _i = 0; _i < browserApi.length; _i++) {
+    FullscreenApi[specApi[_i]] = browserApi[_i];
+  }
+}
+
+exports.default = FullscreenApi;
+
+},{}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -883,10 +914,10 @@ var Initializer = function (_CreatePlayer) {
 
 exports.default = Initializer;
 
-},{"./create.player":11}],15:[function(require,module,exports){
+},{"./create.player":11}],16:[function(require,module,exports){
 "use strict";
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -982,7 +1013,7 @@ var MediaEvents = function (_ComponentEvents) {
 
 exports.default = MediaEvents;
 
-},{"./component.events.js":10}],17:[function(require,module,exports){
+},{"./component.events.js":10}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1126,7 +1157,29 @@ var ModalComponents = function () {
 
 exports.default = ModalComponents;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
+'use strict';
+
+var _initializer = require('./initializer.js');
+
+var _initializer2 = _interopRequireDefault(_initializer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+window.onload = function () {
+    (function () {
+        var attr = 'data-em-player';
+        var getAllPlayer = document.getElementsByTagName('video');
+        getAllPlayer = Array.prototype.slice.call(getAllPlayer);
+        getAllPlayer.forEach(function (each, index) {
+            if (each.getAttribute(attr) !== null || each.getAttribute(attr) !== undefined) {
+                return new _initializer2.default(each, index);
+            }
+        });
+    })();
+};
+
+},{"./initializer.js":15}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1169,4 +1222,4 @@ function getTimer(mil) {
     return str;
 }
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);

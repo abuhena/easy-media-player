@@ -59,6 +59,7 @@
   -webkit-user-select: none;
   -ms-user-select: none;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  z-index: 2147483647;
 }
 .em-player .mask-layer {
   position: absolute;
@@ -162,6 +163,7 @@
   }
 }
 .em-modal {
+  z-index: 2147483647;
   position: absolute;
   z-index: 500;
   background-color: #2b2b2b;
@@ -172,4 +174,13 @@
   padding: 5px;
   font-size: 12px;
   color: #fff;
+}
+video::-webkit-media-controls {
+  display: none !important;
+}
+video::-moz-media-controls {
+  display: none !important;
+}
+video::-ms-media-controls {
+  display: none !important;
 }
