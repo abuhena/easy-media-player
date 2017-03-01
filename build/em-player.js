@@ -92,7 +92,7 @@ exports.default = function (context) {
   var elem = document.createElement('div');
   elem.classList.add('em-button');
   context.fullscreenButtonId = context.idPrefix + '-fullscreen-button';
-  elem.setAttribute('id', context.playButtonId);
+  elem.setAttribute('id', context.fullscreenButtonId);
   elem.setAttribute('data-em-cmp-title', 'Toggle fullscreen');
   elem.classList.add('em-button');
   elem.classList.add('fullscreen72');
@@ -334,6 +334,10 @@ var _fullscreen = require('./fullscreen.api');
 
 var _fullscreen2 = _interopRequireDefault(_fullscreen);
 
+var _resizeHandler = require('./resizeHandler');
+
+var _resizeHandler2 = _interopRequireDefault(_resizeHandler);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -341,6 +345,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var ComponentEvents = exports.ComponentEvents = function () {
   function ComponentEvents() {
     _classCallCheck(this, ComponentEvents);
+
+    this.fullscreenBind = 0;
   }
 
   _createClass(ComponentEvents, [{
@@ -445,7 +451,15 @@ var ComponentEvents = exports.ComponentEvents = function () {
     key: 'onFullscreenButtonClickListener',
     value: function onFullscreenButtonClickListener() {
       if (_fullscreen2.default.requestFullscreen) {
-        this.player[_fullscreen2.default.requestFullscreen]();
+        if (!this.fullscreenBind) {
+          this.player.addEventListener(_fullscreen2.default.fullscreenchange, this.onFullscreenListener.bind(this));
+        }
+        if (this.isFullscreen) {
+          this.player[_fullscreen2.default.exitFullscreen]();
+        } else {
+          this.player[_fullscreen2.default.requestFullscreen]();
+        }
+        this.isFullscreen = !this.isFullscreen;
       }
     }
   }, {
@@ -460,15 +474,23 @@ var ComponentEvents = exports.ComponentEvents = function () {
       }
     }
   }, {
+    key: 'onLayerDoubleClick',
+    value: function onLayerDoubleClick(event) {
+      if (_fullscreen2.default.requestFullscreen) {
+        if (!this.fullscreenBind) {
+          this.player.addEventListener(_fullscreen2.default.fullscreenchange, this.onFullscreenListener.bind(this));
+        }
+        if (this.isFullscreen) {
+          this.player[_fullscreen2.default.exitFullscreen]();
+        } else {
+          this.player[_fullscreen2.default.requestFullscreen]();
+        }
+      }
+    }
+  }, {
     key: 'windowResizeHandler',
     value: function windowResizeHandler() {
-      var wrapper = this.player.parentNode;
-      var dimen = ComponentEvents.screen(wrapper.clienWidth);
-      this.player.style.width = dimen[0] + 'px';
-      this.player.style.height = dimen[1] + 'px';
-      this.layer.style.width = dimen[0] + 'px';
-      this.layer.style.height = dimen[1] + 'px';
-      document.getElementById(this.controlLayerId).style.width = dimen[0] - 30 + 'px';
+      return (0, _resizeHandler2.default)(this);
     }
   }, {
     key: 'hideComponent',
@@ -495,7 +517,7 @@ var ComponentEvents = exports.ComponentEvents = function () {
   return ComponentEvents;
 }();
 
-},{"./fullscreen.api":14,"./timer.js":20}],11:[function(require,module,exports){
+},{"./fullscreen.api":14,"./resizeHandler":20,"./timer.js":21}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -567,6 +589,7 @@ var CreatePlayer = function (_CustomControls) {
       el.style.left = this.player.offsetLeft + 'px';
       el.style.top = this.player.offsetTop + 'px';
       el.addEventListener('click', this.onLayerClick.bind(this));
+      el.addEventListener('dblclick', this.onLayerDoubleClick.bind(this));
       this.player.parentNode.insertBefore(el, this.player.nextSibling);
       this.modalInstance = _modal2.default.getInstance(el);
       return el;
@@ -615,9 +638,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _mediaEvents = require('./media.events.js');
+var _custom = require('./custom.fullscreen');
 
-var _mediaEvents2 = _interopRequireDefault(_mediaEvents);
+var _custom2 = _interopRequireDefault(_custom);
 
 var _timer = require('./timer.js');
 
@@ -663,8 +686,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var CustomControls = function (_MediaEvents) {
-    _inherits(CustomControls, _MediaEvents);
+var CustomControls = function (_CustomFullscreen) {
+    _inherits(CustomControls, _CustomFullscreen);
 
     function CustomControls(index) {
         _classCallCheck(this, CustomControls);
@@ -783,14 +806,74 @@ var CustomControls = function (_MediaEvents) {
     }]);
 
     return CustomControls;
-}(_mediaEvents2.default);
+}(_custom2.default);
 
 exports.default = CustomControls;
 
-},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/pause.js":6,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./media.events.js":17,"./timer.js":20}],13:[function(require,module,exports){
-"use strict";
+},{"./buttons/backward.js":2,"./buttons/forward.js":3,"./buttons/fullscreen.js":4,"./buttons/menu.js":5,"./buttons/pause.js":6,"./buttons/play.js":7,"./buttons/subtitle":8,"./buttons/volume.js":9,"./custom.fullscreen":13,"./timer.js":21}],13:[function(require,module,exports){
+'use strict';
 
-},{}],14:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _mediaEvents = require('./media.events.js');
+
+var _mediaEvents2 = _interopRequireDefault(_mediaEvents);
+
+var _fullscreen = require('./fullscreen.api');
+
+var _fullscreen2 = _interopRequireDefault(_fullscreen);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CustomFullscreen = function (_MediaEvents) {
+  _inherits(CustomFullscreen, _MediaEvents);
+
+  function CustomFullscreen() {
+    _classCallCheck(this, CustomFullscreen);
+
+    return _possibleConstructorReturn(this, (CustomFullscreen.__proto__ || Object.getPrototypeOf(CustomFullscreen)).apply(this, arguments));
+  }
+
+  _createClass(CustomFullscreen, [{
+    key: 'onFullscreenListener',
+    value: function onFullscreenListener(e) {
+      ++this.fullscreenBind; //increase the number to identify the fullscreen state
+      this.isFullscreen = this.fullscreenBind % 2 !== 0;
+      this.toggleFullscreenButton();
+      //console.dir(e);
+      //this.fullscreenCmpUpdate(e.target);
+    }
+  }, {
+    key: 'toggleFullscreenButton',
+    value: function toggleFullscreenButton() {
+      console.log(this.isFullscreen);
+      var btn = document.getElementById(this.fullscreenButtonId);
+      if (this.isFullscreen) {
+        btn.firstChild.classList.remove('fa-expand');
+        btn.firstChild.classList.add('fa-compress');
+      } else {
+        btn.firstChild.classList.add('fa-expand');
+        btn.firstChild.classList.remove('fa-compress');
+      }
+    }
+  }]);
+
+  return CustomFullscreen;
+}(_mediaEvents2.default);
+
+exports.default = CustomFullscreen;
+
+},{"./fullscreen.api":14,"./media.events.js":17}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1183,6 +1266,36 @@ window.onload = function () {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (context) {
+  var _ref = [window.innerHeight, window.innerWidth],
+      h = _ref[0],
+      w = _ref[1];
+
+  console.log('resize');
+  if (context.isFullscreen) {
+    context.layer.style.width = w - 2 + 'px';
+    context.layer.style.height = h + 'px';
+    context.layer.style.left = '0';
+    context.layer.style.top = '0';
+    context.layer.style.zIndex = '2147483647';
+    var controlLayer = document.getElementById(context.controlLayerId);
+    controlLayer.style.width = w - 30 + 'px';
+  } else {
+    context.layer.style.width = context.player.style.width;
+    context.layer.style.height = context.player.style.height;
+    context.layer.style.left = context.player.offsetLeft + 'px';
+    context.layer.style.top = context.player.offsetTop + 'px';
+    document.getElementById(context.controlLayerId).style.width = context.layer.clientWidth - 30 + 'px';
+  }
+};
+
+},{}],21:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = getTimer;
@@ -1222,4 +1335,4 @@ function getTimer(mil) {
     return str;
 }
 
-},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]);

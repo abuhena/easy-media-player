@@ -52,6 +52,7 @@
   top: 0;
   left: 0;
   border: 1px solid #1883d7;
+  transition: width, height, left, top 200ms;
   background: rgba(255, 255, 255, 0);
   user-select: none;
   -moz-user-select: none;
@@ -59,7 +60,6 @@
   -webkit-user-select: none;
   -ms-user-select: none;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-  z-index: 2147483647;
 }
 .em-player .mask-layer {
   position: absolute;
@@ -163,9 +163,8 @@
   }
 }
 .em-modal {
-  z-index: 2147483647;
+  z-index: 2147484000;
   position: absolute;
-  z-index: 500;
   background-color: #2b2b2b;
   border: 1px solid #767676;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;

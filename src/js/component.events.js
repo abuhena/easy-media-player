@@ -1,6 +1,10 @@
 import getTimer from './timer.js';
 import FullscreenAPI from './fullscreen.api';
+import resizeHandler from './resizeHandler';
 export class ComponentEvents {
+  constructor() {
+    this.fullscreenBind = 0;
+  }
     addSliderListeners() {
         this.slider.on('mouseover', this.onSliderMouseover.bind(this));
         this.slider.on('mousemove', this.onSliderMousemove.bind(this));
@@ -86,7 +90,16 @@ export class ComponentEvents {
 
     onFullscreenButtonClickListener() {
       if (FullscreenAPI.requestFullscreen) {
-        this.player[FullscreenAPI.requestFullscreen]();
+        if (!this.fullscreenBind) {
+          this.player.addEventListener(FullscreenAPI.fullscreenchange,
+          this.onFullscreenListener.bind(this));
+        }
+        if (this.isFullscreen) {
+          this.player[FullscreenAPI.exitFullscreen]();
+        } else {
+          this.player[FullscreenAPI.requestFullscreen]();
+        }
+        this.isFullscreen = !this.isFullscreen;
       }
     }
 
@@ -99,14 +112,21 @@ export class ComponentEvents {
       }
       }
     }
+    onLayerDoubleClick(event) {
+      if (FullscreenAPI.requestFullscreen) {
+        if (!this.fullscreenBind) {
+          this.player.addEventListener(FullscreenAPI.fullscreenchange,
+          this.onFullscreenListener.bind(this));
+        }
+        if (this.isFullscreen) {
+          this.player[FullscreenAPI.exitFullscreen]();
+        } else {
+          this.player[FullscreenAPI.requestFullscreen]();
+        }
+      }
+    }
     windowResizeHandler() {
-      const wrapper = this.player.parentNode;
-      const dimen = ComponentEvents.screen(wrapper.clienWidth);
-      this.player.style.width = `${dimen[0]}px`;
-      this.player.style.height = `${dimen[1]}px`;
-      this.layer.style.width = `${dimen[0]}px`;
-      this.layer.style.height = `${dimen[1]}px`;
-      document.getElementById(this.controlLayerId).style.width = `${dimen[0] - 30}px`;
+      return resizeHandler(this);
     }
 
     static screen(w = 640) {

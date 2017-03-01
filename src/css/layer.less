@@ -6,6 +6,7 @@
     top: 0;
     left: 0;
     border: 1px solid @layerBorder;
+    transition: width, height, left, top 200ms;
     background: @water;
     user-select: none;
     -moz-user-select: none;
@@ -13,7 +14,6 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
-    z-index: 2147483647;
     .mask-layer {
       position: absolute;
       width: 100%;
@@ -118,9 +118,8 @@
   }
 }
 .em-modal {
-  z-index: 2147483647;
+  z-index: 2147484000;
         position: absolute;
-        z-index: 500;
         background-color: @modalBG;
         border: 1px solid @modalBorder;
         font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;

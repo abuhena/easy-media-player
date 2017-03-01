@@ -2,7 +2,7 @@ export default function (context) {
   const elem = document.createElement('div');
       elem.classList.add('em-button');
       context.fullscreenButtonId = `${context.idPrefix}-fullscreen-button`;
-      elem.setAttribute('id', context.playButtonId);
+      elem.setAttribute('id', context.fullscreenButtonId);
       elem.setAttribute('data-em-cmp-title', 'Toggle fullscreen');
       elem.classList.add('em-button');
       elem.classList.add('fullscreen72');

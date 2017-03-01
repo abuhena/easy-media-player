@@ -48,6 +48,7 @@ export default class CreatePlayer extends CustomControls {
         el.style.left = `${this.player.offsetLeft}px`;
         el.style.top = `${this.player.offsetTop}px`;
         el.addEventListener('click', this.onLayerClick.bind(this));
+        el.addEventListener('dblclick', this.onLayerDoubleClick.bind(this));
         this.player.parentNode.insertBefore(el, this.player.nextSibling);
         this.modalInstance = ModalComponents.getInstance(el);
         return el;

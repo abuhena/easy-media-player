@@ -1,4 +1,4 @@
-import MediaEvents from './media.events.js';
+import CustomFullscreen from './custom.fullscreen';
 import getTimer from './timer.js';
 import playBtn from './buttons/play.js';
 import pauseBtn from './buttons/pause.js';
@@ -8,7 +8,7 @@ import subtitleBtn from './buttons/subtitle';
 import volumeBtn from './buttons/volume.js';
 import fullscreenBtn from './buttons/fullscreen.js';
 import menuBtn from './buttons/menu.js';
-export default class CustomControls extends MediaEvents {
+export default class CustomControls extends CustomFullscreen {
     constructor(index) {
         super();
         this.index = index;
