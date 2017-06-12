@@ -27,7 +27,7 @@
 
           var video = document.querySelector('.em-video');
           var hls = new Hls();
-          hls.loadSource('https://52.74.101.37/hls5/master.m3u8');
+          hls.loadSource('http://52.74.101.37/hls5/master.m3u8');
           hls.attachMedia(video);
           hls.on(Hls.Events.MANIFEST_PARSED,function() {
             video.play();
