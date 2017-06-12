@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mr-slider test</title>
+    <script src=".tmp/mr-slider.js"></script>
+    <link rel="stylesheet" href=".tmp/mr-slider.css">
+    <script>
+        setTimeout(function () {
+            window.$slider = new MrSlider('hola');
+
+
+            window.$sliderX = new MrSlider('hola1');
+			$sliderX.appendSlider(document.getElementById('gola'), function() {
+                $sliderX.on('change', function (pos) {
+                    if (pos.fill > 200) {
+                        $sliderX.setColorPalette({
+                            fill: '#F21557',
+                            body: '#3C3B3B',
+                            thumb: '#F21557',
+                        });
+                    }
+                    var el = document.getElementById('test');
+                    el.innerHTML = $sliderX.getValue();
+                });
+                $sliderX.on('mousedown', function () {
+				console.log('mousedown');
+                });
+                $sliderX.on('mouseup', function () {
+				console.log('mouseup');
+                });
+                $sliderX.on('init', function (val) {
+                    $sliderX.setRange(1000);
+                });
+                $sliderX.on('mouseout', function (val) {
+                    console.log('mouseout');
+                });
+                $sliderX.on('mouseover', function (val) {
+                });
+                $sliderX.on('mouseout', function (val) {
+				console.log('hola');
+                });
+			});
+        }, 1000);
+    </script>
+</head>
+<body>
+<div style="padding: 20px; margin: 0px auto; width: 90%; height: 150px; background-color: #DAD9D9;">
+
+    <div id="hola" data-mr-slider data-start="0" data-range="300" data-thumb-color="#FF6D1E"
+    data-fill-color="#FF6D1E" data-body-color="#3C3B3B"></div>
+    <h3 id="test"></h3>
+    <div id="gola"></div>
+    <h3 id="test1"></h3>
+
+</div>
+</body>
+</html>
