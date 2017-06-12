@@ -11,6 +11,7 @@ export default class Initializer extends CreatePlayer {
       this.layer = this.createLayer();
       this.controlLayer = this.createControlLayer(this.player, this.layer);
       this.maskLayer = this.createMaskLayer();
+      this.createMeLayer();
       this.timeLayer;
       this.ready().metadata().then(this.videoReady.bind(this)).catch(this.videoError);
     }

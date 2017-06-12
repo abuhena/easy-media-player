@@ -56,6 +56,7 @@ export default class MediaEvents extends ComponentEvents {
     onAfterPlayListener() {
       this.hideComponent(document.getElementById(this.playButtonId));
       this.showComponent(document.getElementById(this.pauseButtonId));
+      this.clTimeout = setTimeout(this.hideControlLayer.bind(this), 3000);
     }
     onPauseListener() {
       this.showComponent(document.getElementById(this.playButtonId));

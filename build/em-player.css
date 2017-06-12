@@ -44,6 +44,30 @@
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
 }
+@keyframes slideInUp {
+  from {
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.slideInUp {
+  animation-name: slideInUp;
+}
+@keyframes slideOutDown {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    visibility: hidden;
+    transform: translate3d(0, 100%, 0);
+  }
+}
+.slideOutDown {
+  animation-name: slideOutDown;
+}
 .em-video {
   background-color: #000000;
 }
@@ -54,12 +78,32 @@
   border: 1px solid #1883d7;
   transition: width, height, left, top 200ms;
   background: rgba(255, 255, 255, 0);
+  overflow: hidden;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-drag: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+}
+.em-player .me {
+  height: 75px;
+  width: 75px;
+  background-image: url(../assets/me.jpg);
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  border: 6px solid #fff;
+  border-radius: 50%;
+  position: relative;
+  top: 23px;
+  left: 19px;
+  cursor: pointer;
+  box-shadow: 0px 0px 25px 1px #000;
+  transition: box-shadow 250ms;
+}
+.em-player .me:hover {
+  box-shadow: 1px 5px 25px 6px #000;
 }
 .em-player .mask-layer {
   position: absolute;

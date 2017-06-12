@@ -11,6 +11,8 @@ export default class CreatePlayer extends CustomControls {
     this.videoURL = this.player.getAttribute('src');
     const preload = this.player.getAttribute('preload') !== null;
     const autoload = this.player.getAttribute('autoload') !== null;
+    const type = this.player.getAttribute('type');
+    const title = this.player.getAttribute('data-title');
     const dimen = CreatePlayer.screen(this.player.getAttribute('data-width'));
     const currentParent = this.player.parentNode;
     const removedPosition = CreatePlayer.removeFrom(currentParent, this.player);
@@ -21,8 +23,11 @@ export default class CreatePlayer extends CustomControls {
     elem.style.height = `${dimen[1]}px`;
     if (autoload) elem.setAttribute('autoload', '');
     if (preload) elem.setAttribute('preload', '');
+    if (title) elem.setAttribute('data-title', title);
+    if (type) elem.setAttribute('type', type);
     this.player = elem;
     const wrapper = document.createElement('div');
+    wrapper.style.margin = '0 auto';
     wrapper.appendChild(this.player);
     if (removedPosition) {
       currentParent.insertBefore(wrapper, removedPosition);

@@ -143,4 +143,27 @@ export class ComponentEvents {
     showComponent(target) {
       if (target.classList.contains('hide-me')) target.classList.remove('hide-me');
     }
+
+    hideControlLayer() {
+      const controlLayer = document.getElementById(`${this.idPrefix}-em-player-controls`);
+      controlLayer.classList.add('animated');
+      controlLayer.classList.add('slideOutDown');
+      this.maskLayer.classList.add('animated');
+      this.maskLayer.classList.add('slideOutDown');
+    }
+
+    onLayerMouseMove() {
+      clearTimeout(this.clTimeout);
+      const controlLayer = document.getElementById(`${this.idPrefix}-em-player-controls`);
+      if (controlLayer) {
+        const classes = controlLayer.classList;
+        if (classes.contains('slideOutDown')) {
+          classes.remove('slideOutDown');
+          this.maskLayer.classList.remove('slideOutDown');
+          classes.add('slideInUp');
+          this.maskLayer.classList.add('slideInUp');
+        }
+      }
+      this.clTimeout = setTimeout(this.hideControlLayer.bind(this), 5000);
+    }
 }

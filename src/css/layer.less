@@ -8,12 +8,32 @@
     border: 1px solid @layerBorder;
     transition: width, height, left, top 200ms;
     background: @water;
+    overflow: hidden;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
     -webkit-user-select: none;
     -ms-user-select: none;
     font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+    .me {
+      height: 75px;
+      width: 75px;
+      background-image: url(../assets/me.jpg);
+      background-position: top left;
+      background-repeat: no-repeat;
+      background-size: 100%;
+      border: 6px solid #fff;
+      border-radius: 50%;
+      position: relative;
+      top: 23px;
+      left: 19px;
+      cursor: pointer;
+      box-shadow: 0px 0px 25px 1px #000;
+      transition: box-shadow 250ms;
+    }
+    .me:hover {
+      box-shadow: 1px 5px 25px 6px #000;
+    }
     .mask-layer {
       position: absolute;
       width: 100%;

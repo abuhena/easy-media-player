@@ -16,6 +16,7 @@ export default class CustomControls extends CustomFullscreen {
         const now = new Date();
         this.idPrefix = `fx-${now.getTime()}`;
         this.slider;
+        this.clTimeout;
     }
 
     createControlLayer(player, layer, done) {
@@ -29,6 +30,7 @@ export default class CustomControls extends CustomFullscreen {
         elem.style.width = `${this.player.offsetWidth - padding}px`;
         elem.style.left = `${padding/2}px`;
         this.layer.appendChild(elem);
+        this.layer.addEventListener('mousemove', this.onLayerMouseMove.bind(this));
         return elem;
     }
 
@@ -36,6 +38,16 @@ export default class CustomControls extends CustomFullscreen {
       const elem = document.createElement('div');
       elem.classList.add('mask-layer');
       this.layer.appendChild(elem);
+      return elem;
+    }
+
+    createMeLayer() {
+      const elem = document.createElement('div');
+      elem.classList.add('me');
+      this.layer.appendChild(elem);
+      elem.addEventListener('click', () => {
+        window.location.href = 'https://github.com/imshaikot';
+      });
       return elem;
     }
 
@@ -55,7 +67,9 @@ export default class CustomControls extends CustomFullscreen {
       elem.classList.add('em-sqeez-area');
       elem.classList.add('left-button-area');
       elem.appendChild(volumeBtn(this));
-      elem.appendChild(subtitleBtn(this));
+      const subtitleBtnElem = subtitleBtn(this);
+      subtitleBtnElem.addEventListener('click', this.hideControlLayer.bind(this));
+      elem.appendChild(subtitleBtnElem);
       parentEl.appendChild(elem);
     }
 
@@ -108,4 +122,3 @@ export default class CustomControls extends CustomFullscreen {
         this.timeLayer[1].innerText = cT;
     }
 }
-

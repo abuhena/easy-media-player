@@ -502,6 +502,31 @@ var ComponentEvents = exports.ComponentEvents = function () {
     value: function showComponent(target) {
       if (target.classList.contains('hide-me')) target.classList.remove('hide-me');
     }
+  }, {
+    key: 'hideControlLayer',
+    value: function hideControlLayer() {
+      var controlLayer = document.getElementById(this.idPrefix + '-em-player-controls');
+      controlLayer.classList.add('animated');
+      controlLayer.classList.add('slideOutDown');
+      this.maskLayer.classList.add('animated');
+      this.maskLayer.classList.add('slideOutDown');
+    }
+  }, {
+    key: 'onLayerMouseMove',
+    value: function onLayerMouseMove() {
+      clearTimeout(this.clTimeout);
+      var controlLayer = document.getElementById(this.idPrefix + '-em-player-controls');
+      if (controlLayer) {
+        var classes = controlLayer.classList;
+        if (classes.contains('slideOutDown')) {
+          classes.remove('slideOutDown');
+          this.maskLayer.classList.remove('slideOutDown');
+          classes.add('slideInUp');
+          this.maskLayer.classList.add('slideInUp');
+        }
+      }
+      this.clTimeout = setTimeout(this.hideControlLayer.bind(this), 5000);
+    }
   }], [{
     key: 'screen',
     value: function screen() {
@@ -560,6 +585,8 @@ var CreatePlayer = function (_CustomControls) {
       this.videoURL = this.player.getAttribute('src');
       var preload = this.player.getAttribute('preload') !== null;
       var autoload = this.player.getAttribute('autoload') !== null;
+      var type = this.player.getAttribute('type');
+      var title = this.player.getAttribute('data-title');
       var dimen = CreatePlayer.screen(this.player.getAttribute('data-width'));
       var currentParent = this.player.parentNode;
       var removedPosition = CreatePlayer.removeFrom(currentParent, this.player);
@@ -570,8 +597,11 @@ var CreatePlayer = function (_CustomControls) {
       elem.style.height = dimen[1] + 'px';
       if (autoload) elem.setAttribute('autoload', '');
       if (preload) elem.setAttribute('preload', '');
+      if (title) elem.setAttribute('data-title', title);
+      if (type) elem.setAttribute('type', type);
       this.player = elem;
       var wrapper = document.createElement('div');
+      wrapper.style.margin = '0 auto';
       wrapper.appendChild(this.player);
       if (removedPosition) {
         currentParent.insertBefore(wrapper, removedPosition);
@@ -699,6 +729,7 @@ var CustomControls = function (_CustomFullscreen) {
         var now = new Date();
         _this.idPrefix = 'fx-' + now.getTime();
         _this.slider;
+        _this.clTimeout;
         return _this;
     }
 
@@ -715,6 +746,7 @@ var CustomControls = function (_CustomFullscreen) {
             elem.style.width = this.player.offsetWidth - padding + 'px';
             elem.style.left = padding / 2 + 'px';
             this.layer.appendChild(elem);
+            this.layer.addEventListener('mousemove', this.onLayerMouseMove.bind(this));
             return elem;
         }
     }, {
@@ -723,6 +755,17 @@ var CustomControls = function (_CustomFullscreen) {
             var elem = document.createElement('div');
             elem.classList.add('mask-layer');
             this.layer.appendChild(elem);
+            return elem;
+        }
+    }, {
+        key: 'createMeLayer',
+        value: function createMeLayer() {
+            var elem = document.createElement('div');
+            elem.classList.add('me');
+            this.layer.appendChild(elem);
+            elem.addEventListener('click', function () {
+                window.location.href = 'https://github.com/imshaikot';
+            });
             return elem;
         }
     }, {
@@ -744,7 +787,9 @@ var CustomControls = function (_CustomFullscreen) {
             elem.classList.add('em-sqeez-area');
             elem.classList.add('left-button-area');
             elem.appendChild((0, _volume2.default)(this));
-            elem.appendChild((0, _subtitle2.default)(this));
+            var subtitleBtnElem = (0, _subtitle2.default)(this);
+            subtitleBtnElem.addEventListener('click', this.hideControlLayer.bind(this));
+            elem.appendChild(subtitleBtnElem);
             parentEl.appendChild(elem);
         }
     }, {
@@ -953,6 +998,7 @@ var Initializer = function (_CreatePlayer) {
             this.layer = this.createLayer();
             this.controlLayer = this.createControlLayer(this.player, this.layer);
             this.maskLayer = this.createMaskLayer();
+            this.createMeLayer();
             this.timeLayer;
             this.ready().metadata().then(this.videoReady.bind(this)).catch(this.videoError);
         }
@@ -1082,6 +1128,7 @@ var MediaEvents = function (_ComponentEvents) {
     value: function onAfterPlayListener() {
       this.hideComponent(document.getElementById(this.playButtonId));
       this.showComponent(document.getElementById(this.pauseButtonId));
+      this.clTimeout = setTimeout(this.hideControlLayer.bind(this), 3000);
     }
   }, {
     key: 'onPauseListener',
